@@ -1,1685 +1,721 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Matematik Arbejdsark · Geometri med store tegninger</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
-    </script>
-    <style>
-        /* ----- Reset & base ----- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #f0f4f8;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 1.5rem;
-            color: #1e293b;
-        }
-        .app {
-            max-width: 1400px;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 28px;
-            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.12);
-            padding: 2rem 2rem 2.5rem;
-            transition: all 0.2s;
-        }
-        .header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.75rem;
-            border-bottom: 2px solid #e9edf2;
-            padding-bottom: 1.25rem;
-        }
-        .header h1 {
-            font-weight: 700;
-            font-size: 1.8rem;
-            letter-spacing: -0.02em;
-            background: linear-gradient(145deg, #0b3b5c, #1a6d8a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .header h1 span {
-            font-size: 1.9rem;
-            -webkit-text-fill-color: initial;
-        }
-        .header .sub {
-            font-size: 0.95rem;
-            color: #64748b;
-            background: #f1f5f9;
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-weight: 500;
-        }
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem 1.5rem;
-            background: #f8fafc;
-            padding: 1.25rem 1.5rem;
-            border-radius: 18px;
-            margin-bottom: 1.75rem;
-            align-items: flex-end;
-            border: 1px solid #e2e8f0;
-        }
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-            flex: 1 0 130px;
-            min-width: 110px;
-        }
-        .control-group label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: #475569;
-        }
-        .control-group select,
-        .control-group input {
-            padding: 0.5rem 0.75rem;
-            border: 1.5px solid #d1d9e6;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            background: white;
-            transition: border 0.2s, box-shadow 0.2s;
-            font-family: inherit;
-            color: #0f172a;
-            width: 100%;
-            min-width: 70px;
-        }
-        .control-group select:focus,
-        .control-group input:focus {
-            outline: none;
-            border-color: #1a6d8a;
-            box-shadow: 0 0 0 3px rgba(26, 109, 138, 0.18);
-        }
-        .control-group input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        .control-group input[type="number"]::-webkit-inner-spin-button,
-        .control-group input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-        }
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-            align-items: center;
-            margin-left: auto;
-            padding-top: 0.2rem;
-        }
-        .btn {
-            padding: 0.55rem 1.4rem;
-            border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s, background 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: #e9edf2;
-            color: #1e293b;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-primary {
-            background: #1a6d8a;
-            color: white;
-            box-shadow: 0 4px 12px rgba(26, 109, 138, 0.25);
-        }
-        .btn-primary:hover {
-            background: #0f5a74;
-            box-shadow: 0 6px 18px rgba(26, 109, 138, 0.30);
-        }
-        .btn-success {
-            background: #0b7e5a;
-            color: white;
-            box-shadow: 0 4px 12px rgba(11, 126, 90, 0.25);
-        }
-        .btn-success:hover {
-            background: #09664a;
-            box-shadow: 0 6px 18px rgba(11, 126, 90, 0.30);
-        }
-        .toggle-wrap {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #334155;
-            cursor: pointer;
-            user-select: none;
-            padding: 0.2rem 0.2rem 0.2rem 0.8rem;
-            border-radius: 40px;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            transition: background 0.2s;
-        }
-        .toggle-wrap:hover {
-            background: #e9edf2;
-        }
-        .toggle-wrap input[type="checkbox"] {
-            width: 38px;
-            height: 22px;
-            border-radius: 40px;
-            appearance: none;
-            background: #cbd5e1;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.25s;
-            flex-shrink: 0;
-            border: none;
-        }
-        .toggle-wrap input[type="checkbox"]::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: white;
-            transition: transform 0.25s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
-        .toggle-wrap input[type="checkbox"]:checked {
-            background: #1a6d8a;
-        }
-        .toggle-wrap input[type="checkbox"]:checked::after {
-            transform: translateX(16px);
-        }
-
-        /* ----- Topic checkboxes ----- */
-        .topic-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem 1.5rem;
-            background: #f8fafc;
-            padding: 0.8rem 1.2rem;
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-        .topic-selector .topic-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem 0.8rem;
-            align-items: center;
-        }
-        .topic-selector .topic-group label {
-            display: flex;
-            align-items: center;
-            gap: 0.2rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            background: #f1f5f9;
-            border: 1px solid transparent;
-            transition: background 0.15s, border-color 0.15s;
-        }
-        .topic-selector .topic-group label:hover {
-            background: #e9edf2;
-        }
-        .topic-selector .topic-group label input[type="checkbox"] {
-            margin-right: 0.1rem;
-            accent-color: #1a6d8a;
-            width: 14px;
-            height: 14px;
-            cursor: pointer;
-        }
-        .topic-selector .topic-group .group-label {
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: #475569;
-            margin-right: 0.3rem;
-        }
-        .topic-selector .select-all-btn {
-            font-size: 0.8rem;
-            padding: 0.2rem 1rem;
-            border-radius: 30px;
-            background: #e2e8f0;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: #1e293b;
-            transition: background 0.2s;
-        }
-        .topic-selector .select-all-btn:hover {
-            background: #cbd5e1;
-        }
-        .topic-selector .topic-count {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-left: auto;
-            white-space: nowrap;
-        }
-
-        .worksheet-wrapper {
-            background: #ffffff;
-            border-radius: 18px;
-            border: 1px solid #e2e8f0;
-            padding: 1.5rem 1.5rem 1rem;
-            min-height: 260px;
-            transition: opacity 0.25s;
-        }
-        .worksheet-wrapper.loading {
-            opacity: 0.5;
-        }
-        .worksheet {
-            font-family: 'Times New Roman', 'Georgia', serif;
-            font-size: 1.1rem;
-            line-height: 2.1;
-            color: #0f172a;
-        }
-        .worksheet .ws-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-bottom: 2px solid #1e293b;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.2rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .worksheet .ws-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-        .worksheet .ws-meta {
-            font-size: 0.9rem;
-            color: #334155;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .worksheet .ws-meta span {
-            display: inline-block;
-        }
-        .worksheet .ws-meta .line {
-            display: inline-block;
-            width: 100px;
-            border-bottom: 1px solid #64748b;
-            margin-left: 0.3rem;
-        }
-
-        /* ----- Problem layout ----- */
-        .worksheet .problems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 0.8rem 1.2rem;
-            padding: 0.2rem 0;
-        }
-        .worksheet .problem {
-            display: flex;
-            flex-direction: column;
-            padding: 0.6rem 0.6rem 0.4rem;
-            border-bottom: 1px dotted #e9edf2;
-            background: #fafcfe;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-        /* Special geometry problem: full width, larger drawing */
-        .worksheet .problem.geometry-problem {
-            grid-column: 1 / -1;
-            background: #f8faff;
-            border: 1px solid #dbeafe;
-            padding: 1rem 1rem 0.8rem;
-            margin-bottom: 0.2rem;
-        }
-        .worksheet .problem .problem-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.2rem;
-        }
-        .worksheet .problem .drawing-container {
-            flex: 0 0 150px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 130px;
-            background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            padding: 6px;
-        }
-        .worksheet .problem .drawing-container svg {
-            width: 140px;
-            height: 140px;
-            display: block;
-        }
-        .worksheet .problem .text-container {
-            flex: 1;
-            min-width: 0;
-        }
-        .worksheet .problem .num {
-            font-weight: 600;
-            color: #475569;
-            font-size: 0.9rem;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            margin-right: 0.2rem;
-        }
-        .worksheet .problem .q {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            word-break: break-word;
-        }
-        .worksheet .problem .ans {
-            font-weight: 600;
-            color: #0b7e5a;
-            margin-left: 0.2rem;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
-        .worksheet .problem .ans.hidden {
-            visibility: hidden;
-        }
-        .worksheet .problem .placeholder {
-            display: inline-block;
-            min-width: 2.4rem;
-            border-bottom: 1.5px solid #94a3b8;
-            margin: 0 0.1rem;
-            padding: 0 0.2rem;
-        }
-        .worksheet .problem .frac {
-            display: inline-block;
-            vertical-align: middle;
-            text-align: center;
-        }
-        .worksheet .problem .frac .num {
-            display: block;
-            border-bottom: 1px solid #000;
-            padding: 0 0.2rem;
-            font-weight: 600;
-            min-width: 1.2rem;
-        }
-        .worksheet .problem .frac .den {
-            display: block;
-            padding: 0 0.2rem;
-        }
-
-        /* ----- Formula reference ----- */
-        .worksheet .formula-ref {
-            margin-top: 2rem;
-            padding-top: 0.8rem;
-            border-top: 2px dashed #94a3b8;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            font-size: 0.95rem;
-            color: #1e293b;
-        }
-        .worksheet .formula-ref h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-        .worksheet .formula-ref .formula-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem 2rem;
-        }
-        .worksheet .formula-ref .formula-item {
-            background: #f8fafc;
-            padding: 0.2rem 0.8rem;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            font-size: 0.9rem;
-        }
-        .worksheet .formula-ref .formula-item strong {
-            font-weight: 600;
-            margin-right: 0.3rem;
-        }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 1rem;
-            color: #94a3b8;
-            text-align: center;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
-        .empty-state .big-icon {
-            font-size: 3.6rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.5;
-        }
-        .empty-state p {
-            font-size: 1.1rem;
-            max-width: 340px;
-        }
-
-        /* ----- Responsive ----- */
-        @media (max-width: 820px) {
-            .app {
-                padding: 1.25rem;
-            }
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.8rem;
-            }
-            .control-group {
-                flex: 1 1 auto;
-                min-width: 0;
-            }
-            .btn-group {
-                margin-left: 0;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-            }
-            .worksheet .problems-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 0.6rem;
-            }
-            .worksheet .problem.geometry-problem {
-                grid-column: 1 / -1;
-            }
-            .worksheet .problem .drawing-container {
-                flex-basis: 110px;
-            }
-            .worksheet .problem .drawing-container svg {
-                width: 105px;
-                height: 105px;
-            }
-            .header h1 {
-                font-size: 1.4rem;
-            }
-            .topic-selector {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.5rem;
-            }
-            .topic-selector .topic-group {
-                gap: 0.2rem 0.6rem;
-            }
-            .topic-selector .topic-count {
-                margin-left: 0;
-                text-align: right;
-            }
-        }
-        @media (max-width: 480px) {
-            body {
-                padding: 0.6rem;
-            }
-            .app {
-                padding: 0.8rem;
-                border-radius: 18px;
-            }
-            .worksheet-wrapper {
-                padding: 0.8rem;
-            }
-            .worksheet .problems-grid {
-                grid-template-columns: 1fr;
-                gap: 0.4rem;
-            }
-            .worksheet .problem .drawing-container {
-                flex-basis: 80px;
-            }
-            .worksheet .problem .drawing-container svg {
-                width: 75px;
-                height: 75px;
-            }
-            .worksheet .problem .q {
-                font-size: 0.95rem;
-            }
-            .btn {
-                padding: 0.4rem 1rem;
-                font-size: 0.8rem;
-            }
-            .worksheet .ws-meta {
-                font-size: 0.75rem;
-                gap: 0.8rem;
-            }
-            .worksheet .ws-meta .line {
-                width: 60px;
-            }
-            .topic-selector .topic-group label {
-                font-size: 0.75rem;
-                padding: 0.1rem 0.4rem;
-            }
-        }
-        @media print {
-            body {
-                background: white !important;
-                padding: 0 !important;
-            }
-            .app {
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                padding: 0.5in !important;
-                max-width: 100% !important;
-            }
-            .controls,
-            .btn-group,
-            .toggle-wrap,
-            .no-print,
-            .topic-selector {
-                display: none !important;
-            }
-            .worksheet-wrapper {
-                border: none !important;
-                padding: 0 !important;
-                border-radius: 0 !important;
-            }
-            .worksheet .problem .ans.hidden {
-                visibility: visible !important;
-                color: #0b7e5a !important;
-            }
-            .worksheet .problem .placeholder {
-                border-bottom: 1.5px solid #94a3b8 !important;
-            }
-            .worksheet .ws-header {
-                border-bottom: 2px solid #000 !important;
-            }
-            .worksheet .problem {
-                border-bottom: 1px dotted #ccc !important;
-                background: white !important;
-            }
-            .worksheet .problem.geometry-problem {
-                background: #fafcfe !important;
-                border: 1px solid #dbeafe !important;
-            }
-            .worksheet .problem .num {
-                color: #000 !important;
-            }
-            .worksheet .ws-meta {
-                color: #000 !important;
-            }
-            .worksheet .formula-ref {
-                border-top: 2px dashed #000 !important;
-            }
-            .worksheet .formula-ref .formula-item {
-                background: #f1f5f9 !important;
-                border: 1px solid #ccc !important;
-            }
-            .worksheet .problem .drawing-container svg {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matematik Arbejdsark · 0.–9. klasse</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+  </script>
+  <style>
+    :root {
+      --primary: #1e5a78;
+      --primary-light: #2d7a9e;
+      --accent: #0d7a50;
+      --bg: #f2f6fa;
+      --surface: #ffffff;
+      --text: #1a2a38;
+      --text-muted: #5c6b7a;
+      --border: #dbe2ea;
+      --shadow: 0 8px 28px rgba(0, 18, 36, 0.07);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 1.2rem;
+      color: var(--text);
+    }
+    .app {
+      max-width: 1400px; width: 100%; background: var(--surface);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.8rem 2rem 2.2rem;
+    }
+    .header {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border);
+    }
+    .header h1 {
+      font-weight: 700; font-size: 1.7rem; color: var(--primary);
+      display: flex; align-items: center; gap: 0.4rem; letter-spacing: -0.01em;
+    }
+    .header h1 span { font-size: 1.9rem; }
+    .header .sub {
+      font-size: 0.85rem; color: var(--text-muted); background: #eef3f8;
+      padding: 0.3rem 1rem; border-radius: 30px; font-weight: 500; border: 1px solid var(--border);
+    }
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem;
+      background: #f9fafb; padding: 1rem 1.3rem; border-radius: 14px;
+      margin-bottom: 1.3rem; align-items: flex-end; border: 1px solid var(--border);
+    }
+    .control-group {
+      display: flex; flex-direction: column; gap: 0.2rem; flex: 1 0 110px; min-width: 100px;
+    }
+    .control-group label {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-muted);
+    }
+    .control-group select, .control-group input {
+      padding: 0.45rem 0.7rem; border: 1.5px solid var(--border); border-radius: 10px;
+      font-size: 0.9rem; background: white; font-family: inherit; color: var(--text); width: 100%;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .control-group select:focus, .control-group input:focus {
+      outline: none; border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(45,122,158,0.12);
+    }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-left: auto; padding-top: 0.1rem; }
+    .btn {
+      padding: 0.5rem 1.3rem; border: none; border-radius: 35px; font-weight: 600;
+      font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
+      background: #e5eaf0; color: var(--text); white-space: nowrap;
+      transition: transform 0.12s, box-shadow 0.18s, background 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #174a62; }
+    .btn-success { background: var(--accent); color: #fff; }
+    .btn-success:hover { background: #0a6240; }
+    .toggle-wrap {
+      display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; font-weight: 500;
+      color: var(--text); cursor: pointer; padding: 0.15rem 0.15rem 0.15rem 0.7rem;
+      border-radius: 35px; background: #f1f4f8; border: 1px solid var(--border); user-select: none;
+    }
+    .toggle-wrap input[type="checkbox"] {
+      width: 34px; height: 19px; border-radius: 30px; appearance: none;
+      background: #c5cdd8; position: relative; cursor: pointer; transition: background 0.25s;
+      flex-shrink: 0;
+    }
+    .toggle-wrap input[type="checkbox"]::after {
+      content: ''; position: absolute; top: 2px; left: 2px; width: 15px; height: 15px;
+      border-radius: 50%; background: #fff; transition: transform 0.25s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+    }
+    .toggle-wrap input[type="checkbox"]:checked { background: var(--primary); }
+    .toggle-wrap input[type="checkbox"]:checked::after { transform: translateX(15px); }
+    .topic-selector {
+      background: #fafbfc; border-radius: 14px; border: 1px solid var(--border);
+      padding: 1rem 1.2rem; margin-bottom: 1.3rem;
+    }
+    .topic-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.7rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .topic-header .filter-label {
+      display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;
+      font-weight: 500; cursor: pointer; color: var(--text-muted);
+    }
+    .topic-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 0.6rem 1rem;
+    }
+    .topic-card {
+      background: #fff; border-radius: 10px; padding: 0.55rem 0.7rem;
+      border: 1px solid #edf1f7;
+    }
+    .topic-card .card-title {
+      font-weight: 700; font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--primary); margin-bottom: 0.35rem;
+    }
+    .topic-card .card-chips { display: flex; flex-wrap: wrap; gap: 0.25rem 0.3rem; }
+    .topic-chip {
+      display: flex; align-items: center; gap: 0.15rem; font-size: 0.77rem;
+      background: #f5f7fa; padding: 0.12rem 0.5rem; border-radius: 16px;
+      border: 1px solid transparent; cursor: pointer; transition: all 0.15s;
+    }
+    .topic-chip:hover { background: #e3e9f2; border-color: #c8d4e2; }
+    .topic-chip input[type="checkbox"] { accent-color: var(--primary); width: 12px; height: 12px; cursor: pointer; margin: 0; }
+    .worksheet-wrapper {
+      background: #fff; border-radius: 14px; border: 1px solid var(--border);
+      padding: 1.3rem 1.4rem 0.9rem; min-height: 220px; transition: opacity 0.28s;
+    }
+    .worksheet-wrapper.loading { opacity: 0.45; pointer-events: none; }
+    .worksheet { font-family: 'Times New Roman', 'Georgia', serif; font-size: 1.05rem; line-height: 2; color: var(--text); }
+    .ws-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-bottom: 2px solid #1e293b; padding-bottom: 0.45rem; margin-bottom: 1rem;
+      flex-wrap: wrap; gap: 0.4rem;
+    }
+    .ws-title { font-size: 1.4rem; font-weight: 700; }
+    .ws-meta {
+      font-size: 0.85rem; color: #334155; font-family: 'Segoe UI', sans-serif;
+      display: flex; gap: 1.2rem; flex-wrap: wrap;
+    }
+    .ws-meta .line { display: inline-block; width: 70px; border-bottom: 1px solid #64748b; margin-left: 0.2rem; }
+    .problems-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.6rem 1rem;
+    }
+    .problem {
+      background: #fcfdff; border: 1px solid #eef2f7; border-radius: 8px;
+      padding: 0.55rem 0.7rem; display: flex; align-items: flex-start; gap: 0.8rem;
+    }
+    .problem.geometry-problem { grid-column: 1 / -1; background: #f8faff; border-color: #dbeafe; }
+    .problem .drawing-container {
+      flex: 0 0 110px; display: flex; justify-content: center; align-items: center;
+      background: #fff; border-radius: 5px; border: 1px solid #e2e8f0; padding: 3px;
+    }
+    .problem .drawing-container svg, .problem .drawing-container img { width: 105px; height: 105px; display: block; }
+    .problem .text-container { flex: 1; min-width: 0; }
+    .problem .num { font-weight: 600; color: var(--text-muted); font-size: 0.8rem; margin-right: 0.15rem; }
+    .problem .q { font-size: 0.98rem; line-height: 1.45; }
+    .ans { font-weight: 600; color: var(--accent); margin-left: 0.15rem; }
+    .placeholder { display: inline-block; min-width: 2rem; border-bottom: 1.5px solid #94a3b8; margin: 0 0.08rem; }
+    .frac { display: inline-block; vertical-align: middle; text-align: center; }
+    .frac .num { display: block; border-bottom: 1px solid #000; padding: 0 0.2rem; font-weight: 600; }
+    .frac .den { display: block; padding: 0 0.2rem; }
+    .formula-ref { margin-top: 1.6rem; padding-top: 0.6rem; border-top: 2px dashed #94a3b8; font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; }
+    .formula-ref h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .formula-grid { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
+    .formula-item { background: #f8fafc; padding: 0.2rem 0.7rem; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.8rem; }
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1rem; color: #94a3b8; text-align: center; }
+    .empty-state .big-icon { font-size: 2.8rem; margin-bottom: 0.4rem; opacity: 0.5; }
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
+      z-index: 9999; backdrop-filter: blur(4px); animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-box {
+      background: #fff; border-radius: 18px; padding: 1.8rem 2rem; max-width: 460px; width: 90%;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.22); animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-box h2 { font-size: 1.35rem; color: var(--primary); margin-bottom: 0.2rem; }
+    .modal-box .version-tag { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 0.15rem 0.7rem; border-radius: 20px; font-weight: 600; font-size: 0.8rem; margin-bottom: 0.8rem; }
+    .modal-box ul { list-style: none; padding: 0; margin: 0.8rem 0 1.2rem; }
+    .modal-box ul li { padding: 0.3rem 0; border-bottom: 1px solid #f3f6fa; display: flex; align-items: flex-start; gap: 0.4rem; font-size: 0.88rem; color: #334155; }
+    .modal-box ul li::before { content: '✨'; flex-shrink: 0; }
+    .modal-box .btn-close { width: 100%; padding: 0.55rem; border: none; border-radius: 28px; background: var(--primary); color: #fff; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
+    .modal-box .btn-close:hover { background: #174a62; }
+    @media (max-width: 820px) {
+      .app { padding: 1rem 1.2rem; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .btn-group { margin-left: 0; }
+      .problems-grid { grid-template-columns: 1fr 1fr; }
+      .problem.geometry-problem { grid-column: 1 / -1; }
+    }
+    @media (max-width: 500px) {
+      .problems-grid { grid-template-columns: 1fr; }
+      .topic-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .controls, .btn-group, .topic-selector, .no-print, .modal-overlay { display: none !important; }
+      .worksheet-wrapper { border: none !important; padding: 0 !important; }
+      .ans.hidden { visibility: visible !important; }
+    }
+  </style>
 </head>
 <body>
-    <div class="app" id="app">
-        <div class="header">
-            <h1><span>📐</span> Matematik Arbejdsark</h1>
-            <div class="sub">0.–9. klasse · alle emner</div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls no-print">
-            <div class="control-group">
-                <label for="gradeSelect">Klasse</label>
-                <select id="gradeSelect">
-                    <option value="0">0. klasse</option>
-                    <option value="1">1. klasse</option>
-                    <option value="2" selected>2. klasse</option>
-                    <option value="3">3. klasse</option>
-                    <option value="4">4. klasse</option>
-                    <option value="5">5. klasse</option>
-                    <option value="6">6. klasse</option>
-                    <option value="7">7. klasse</option>
-                    <option value="8">8. klasse</option>
-                    <option value="9">9. klasse</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="countInput">Antal opgaver</label>
-                <input type="number" id="countInput" value="20" min="4" max="40" step="1" />
-            </div>
-            <div class="btn-group">
-                <button class="btn btn-primary" id="generateBtn">🔄 Generer</button>
-                <button class="btn btn-success" id="exportBtn">📄 Eksporter PDF</button>
-                <label class="toggle-wrap" title="Vis svar i arket">
-                    <span>Vis svar</span>
-                    <input type="checkbox" id="showAnswersToggle" />
-                </label>
-            </div>
-        </div>
-
-        <!-- Topic selector -->
-        <div class="topic-selector no-print" id="topicSelector">
-            <div class="topic-group" id="topicGroupContainer">
-                <!-- Dynamically populated -->
-            </div>
-            <button class="select-all-btn" id="selectAllBtn">Vælg alle</button>
-            <span class="topic-count" id="topicCount">0 emner valgt</span>
-        </div>
-
-        <!-- Worksheet -->
-        <div class="worksheet-wrapper" id="worksheetWrapper">
-            <div class="worksheet" id="worksheet">
-                <div class="empty-state">
-                    <div class="big-icon">📋</div>
-                    <p>Vælg klasse og emner, tryk <strong>Generer</strong> for at lave et nyt ark.</p>
-                </div>
-            </div>
-        </div>
+  <div class="app">
+    <div class="header">
+      <h1><span>📐</span> Matematik Arbejdsark</h1>
+      <div class="sub">0.–9. klasse · Alderssvarende opgaver</div>
     </div>
+    <div class="controls no-print">
+      <div class="control-group">
+        <label for="gradeSelect">Klassetrin</label>
+        <select id="gradeSelect">
+          <option value="0">0. klasse</option><option value="1">1. klasse</option><option value="2">2. klasse</option>
+          <option value="3">3. klasse</option><option value="4" selected>4. klasse</option><option value="5">5. klasse</option>
+          <option value="6">6. klasse</option><option value="7">7. klasse</option><option value="8">8. klasse</option><option value="9">9. klasse</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="countInput">Antal opgaver</label>
+        <input type="number" id="countInput" value="16" min="4" max="36" step="1" />
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="generateBtn">🔄 Generer ark</button>
+        <button class="btn btn-success" id="exportBtn">📄 PDF</button>
+        <label class="toggle-wrap" title="Vis eller skjul svar">
+          <span>Vis svar</span>
+          <input type="checkbox" id="showAnswersToggle" />
+        </label>
+      </div>
+    </div>
+    <div class="topic-selector no-print" id="topicSelector">
+      <div class="topic-header">
+        <span style="font-weight:600;font-size:0.88rem;">📚 Vælg emner</span>
+        <label class="filter-label">
+          <span>Vis alle emner (også over klassetrin)</span>
+          <input type="checkbox" id="showAllTopicsToggle" />
+        </label>
+      </div>
+      <div class="topic-grid" id="topicGridContainer"></div>
+    </div>
+    <div class="worksheet-wrapper" id="worksheetWrapper">
+      <div class="worksheet" id="worksheet">
+        <div class="empty-state">
+          <div class="big-icon">📋</div>
+          <p>Vælg klassetrin og emner, og tryk <strong>Generer ark</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function() {
+      // ==================== EMNER OG KLASSETRIN ====================
+      const TOPICS = {
+        addition: { label:'Addition', group:'Regning', minGrade:0 },
+        subtraction: { label:'Subtraktion', group:'Regning', minGrade:0 },
+        multiplication: { label:'Multiplikation', group:'Regning', minGrade:2 },
+        division: { label:'Division', group:'Regning', minGrade:3 },
+        fractions_intro: { label:'Brøker – intro', group:'Brøker', minGrade:3 },
+        fractions_addsub: { label:'Brøker +/−', group:'Brøker', minGrade:4 },
+        fractions_muldiv: { label:'Brøker ·/÷', group:'Brøker', minGrade:5 },
+        decimals_addsub: { label:'Decimaler +/−', group:'Decimaler', minGrade:4 },
+        decimals_muldiv: { label:'Decimaler ·/÷', group:'Decimaler', minGrade:5 },
+        percentages: { label:'Procent', group:'Procent & potens', minGrade:5 },
+        powers: { label:'Potenser', group:'Procent & potens', minGrade:7 },
+        squareroot: { label:'Kvadratrod', group:'Procent & potens', minGrade:7 },
+        negative_addsub: { label:'Negative +/−', group:'Negative tal', minGrade:6 },
+        negative_muldiv: { label:'Negative ·/÷', group:'Negative tal', minGrade:7 },
+        order_ops: { label:'Rækkefølge', group:'Algebra', minGrade:5 },
+        algebra_basic: { label:'Algebra – udtryk', group:'Algebra', minGrade:6 },
+        equations: { label:'Ligninger', group:'Algebra', minGrade:7 },
+        quadratic_eq: { label:'Andengradsligninger', group:'Algebra', minGrade:9 },
+        geometry_area: { label:'Areal', group:'Geometri', minGrade:4 },
+        geometry_perimeter: { label:'Omkreds', group:'Geometri', minGrade:3 },
+        geometry_volume: { label:'Rumfang', group:'Geometri', minGrade:5 },
+        geometry_pythagoras: { label:'Pythagoras', group:'Geometri', minGrade:7 },
+        trigonometry: { label:'Trigonometri', group:'Geometri', minGrade:8 },
+        statistics: { label:'Statistik', group:'Data & sandsynlighed', minGrade:5 },
+        probability: { label:'Sandsynlighed', group:'Data & sandsynlighed', minGrade:6 },
+      };
+      const TOPIC_KEYS = Object.keys(TOPICS);
 
-    <script>
-        // ============================================================
-        //  TOPIC DEFINITIONS
-        // ============================================================
-        const TOPIC_DEFINITIONS = {
-            addition: { label: 'Addition', group: 'Grundlæggende' },
-            subtraction: { label: 'Subtraktion', group: 'Grundlæggende' },
-            multiplication: { label: 'Multiplikation', group: 'Grundlæggende' },
-            division: { label: 'Division', group: 'Grundlæggende' },
-            fractions_addsub: { label: 'Brøker +/−', group: 'Brøker & decimaler' },
-            fractions_muldiv: { label: 'Brøker ·/÷', group: 'Brøker & decimaler' },
-            decimals_addsub: { label: 'Decimaler +/−', group: 'Brøker & decimaler' },
-            decimals_muldiv: { label: 'Decimaler ·/÷', group: 'Brøker & decimaler' },
-            percentages: { label: 'Procentregning', group: 'Procent & potens' },
-            powers: { label: 'Potenser', group: 'Procent & potens' },
-            squareroot: { label: 'Kvadratrod', group: 'Procent & potens' },
-            negative_addsub: { label: 'Negative +/−', group: 'Negative tal' },
-            negative_muldiv: { label: 'Negative ·/÷', group: 'Negative tal' },
-            order_ops: { label: 'Parenteser & rækkefølge', group: 'Algebra & geometri' },
-            algebra_simplify: { label: 'Algebra – forenkle', group: 'Algebra & geometri' },
-            algebra_evaluate: { label: 'Algebra – evaluer', group: 'Algebra & geometri' },
-            equations: { label: 'Ligninger', group: 'Algebra & geometri' },
-            geometry_area: { label: 'Areal', group: 'Algebra & geometri' },
-            geometry_perimeter: { label: 'Omkreds', group: 'Algebra & geometri' },
-            geometry_volume: { label: 'Rumfang', group: 'Algebra & geometri' },
-        };
+      function getAvailableTopics(grade, showAll) {
+        return TOPIC_KEYS.filter(k => showAll || TOPICS[k].minGrade <= grade);
+      }
 
-        const TOPIC_KEYS = Object.keys(TOPIC_DEFINITIONS);
+      // ==================== HJÆLPERE ====================
+      function rand(min, max) { return Math.floor(Math.random()*(max-min+1))+min; }
+      function pick(arr) { return arr[rand(0, arr.length-1)]; }
+      function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a; }
+      function simplifyFraction(num,den){
+        if(den<0){ num=-num; den=-den; } if(num===0) return {n:0,d:1};
+        const g=gcd(Math.abs(num),Math.abs(den)); return {n:num/g, d:den/g};
+      }
+      function fracDisplay(n,d){ if(d===1) return `${n}`; return `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`; }
+      const danskeNavne = ['Sofie','Mikkel','Emma','Lucas','Ida','Noah','Clara','Oliver','Alma','Victor','Karla','Elias','Freja','Oscar','Lærke'];
+      function wordProblem(template, reps) {
+        let s = template;
+        for (const [k,v] of Object.entries(reps)) s = s.replace(new RegExp(`\\{${k}\\}`,'g'), v);
+        return s;
+      }
 
-        // ============================================================
-        //  HELPERS
-        // ============================================================
-        function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+      // ==================== TEGNINGER (kompakte) ====================
+      function drawRectangle(l,w,lblL,lblW){ const sc=95/Math.max(l,w), rW=l*sc, rH=w*sc, x=(130-rW)/2, y=(130-rH)/2, sz=7; return `<svg viewBox="0 0 130 130" width="105" height="105"><rect x="${x}" y="${y}" width="${rW}" height="${rH}" fill="#dbeafe" stroke="#1e293b" stroke-width="2" rx="2"/><polyline points="${x+sz},${y+rH} ${x+sz},${y+rH-sz} ${x},${y+rH-sz}" fill="none" stroke="#1e293b" stroke-width="1.5"/><line x1="${x}" y1="${y+rH+7}" x2="${x+rW}" y2="${y+rH+7}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1.5"/><line x1="${x+rW+7}" y1="${y}" x2="${x+rW+7}" y2="${y+rH}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1.5"/><text x="${x+rW/2}" y="${y+rH+18}" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">${lblL}</text><text x="${x+rW+20}" y="${y+rH/2+4}" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">${lblW}</text></svg>`; }
+      function drawTriangle(b,h,lblB,lblH){ const sc=95/Math.max(b,h), bw=b*sc, bh=h*sc, cx=65,cy=100, x1=cx-bw/2,y1=cy, x2=cx+bw/2,y2=cy, x3=cx,y3=cy-bh, sz=7; return `<svg viewBox="0 0 130 130" width="105" height="105"><polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="#dbeafe" stroke="#1e293b" stroke-width="2"/><line x1="${x3}" y1="${y1}" x2="${x3}" y2="${y3}" stroke="#1e293b" stroke-dasharray="4,4" stroke-width="1.5"/><polyline points="${x3+sz},${y1} ${x3+sz},${y1-sz} ${x3},${y1-sz}" fill="none" stroke="#1e293b" stroke-width="1.5"/><line x1="${x1}" y1="${y1+7}" x2="${x2}" y2="${y1+7}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1.5"/><text x="${cx}" y="${y1+18}" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">${lblB}</text><text x="${cx+15}" y="${cy-bh/2+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">${lblH}</text></svg>`; }
+      function drawCircle(r,lbl){ const sc=52/r, rad=r*sc, cx=65,cy=65; return `<svg viewBox="0 0 130 130" width="105" height="105"><circle cx="${cx}" cy="${cy}" r="${rad}" fill="#dbeafe" stroke="#1e293b" stroke-width="2"/><line x1="${cx}" y1="${cy}" x2="${cx+rad}" y2="${cy}" stroke="#1e293b" stroke-width="2"/><line x1="${cx-rad}" y1="${cy}" x2="${cx+rad}" y2="${cy}" stroke="#1e293b" stroke-dasharray="4,4" stroke-width="1.5"/><circle cx="${cx}" cy="${cy}" r="2" fill="#1e293b"/><text x="${cx+rad/2}" y="${cy-11}" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">${lbl}</text></svg>`; }
+      function drawBox(l,w,h,lblL,lblW,lblH){ const sc=45/Math.max(l,w,h), a=l*sc,b=w*sc,c=h*sc, dx=a*0.7,dy=-a*0.35,fw=b,fh=c,fx=(130-fw-dx)/2,fy=(130-fh+dy)/2; return `<svg viewBox="0 0 130 130" width="105" height="105"><polygon points="${fx+fw},${fy} ${fx+fw},${fy+fh} ${fx+fw+dx},${fy+fh+dy} ${fx+fw+dx},${fy+dy}" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.5"/><polygon points="${fx},${fy} ${fx+fw},${fy} ${fx+fw+dx},${fy+dy} ${fx+dx},${fy+dy}" fill="#dbeafe" stroke="#1e293b" stroke-width="1.5"/><rect x="${fx}" y="${fy}" width="${fw}" height="${fh}" fill="#bfdbfe" stroke="#1e293b" stroke-width="1.5" rx="1"/><text x="${fx+fw/2}" y="${fy+fh+15}" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">${lblW}</text><text x="${fx-12}" y="${fy+fh/2+3}" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a" transform="rotate(-90,${fx-12},${fy+fh/2+3})">${lblH}</text><text x="${fx+fw+dx/2+8}" y="${fy+dy/2+fh/2+3}" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a" transform="rotate(-26,${fx+fw+dx/2+8},${fy+dy/2+fh/2+3})">${lblL}</text></svg>`; }
+      function drawPythagoras(a,b,c){ const sc=50/Math.max(a,b,c), a1=a*sc,b1=b*sc, cx=65,cy=95, x1=cx-b1/2,y1=cy, x2=cx+b1/2,y2=cy, x3=cx+b1/2,y3=cy-a1; return `<svg viewBox="0 0 130 130" width="105" height="105"><polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="#dbeafe" stroke="#1e293b" stroke-width="2"/><rect x="${x2-5}" y="${y3}" width="5" height="5" fill="#1e293b"/><text x="${(x1+x2)/2}" y="${y1+14}" font-size="11" font-weight="700" fill="#0f172a">${b}</text><text x="${x2+12}" y="${(y2+y3)/2+4}" font-size="11" font-weight="700" fill="#0f172a">${a}</text><text x="${(x1+x3)/2-8}" y="${(y1+y3)/2-5}" font-size="11" font-weight="700" fill="#0f172a">${c}</text></svg>`; }
+      function drawRightTriangleTrig(a,b,c,angA,angB){ const sc=50/Math.max(a,b,c), a1=a*sc,b1=b*sc, cx=65,cy=95, x1=cx-b1/2,y1=cy, x2=cx+b1/2,y2=cy, x3=cx+b1/2,y3=cy-a1; return `<svg viewBox="0 0 130 130" width="105" height="105"><polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="#dbeafe" stroke="#1e293b" stroke-width="2"/><rect x="${x2-5}" y="${y3}" width="5" height="5" fill="#1e293b"/><text x="${(x1+x2)/2}" y="${y1+14}" font-size="10" font-weight="700" fill="#0f172a">${b}</text><text x="${x2+10}" y="${(y2+y3)/2+4}" font-size="10" font-weight="700" fill="#0f172a">${a}</text><text x="${(x1+x3)/2-8}" y="${(y1+y3)/2-5}" font-size="10" font-weight="700" fill="#0f172a">${c}</text><text x="${x1-4}" y="${y1-6}" font-size="9" fill="#475569">${angA}°</text><text x="${x3+4}" y="${y3-6}" font-size="9" fill="#475569">${angB}°</text></svg>`; }
 
-        function pick(arr) { return arr[rand(0, arr.length - 1)]; }
-
-        function gcd(a, b) { a = Math.abs(a);
-            b = Math.abs(b); while (b) {
-                [a, b] = [b, a % b]; } return a; }
-
-        function simplifyFraction(num, den) {
-            if (den < 0) { num = -num;
-                den = -den; }
-            if (num === 0) return { n: 0, d: 1 };
-            const g = gcd(Math.abs(num), Math.abs(den));
-            return { n: num / g, d: den / g };
+      // ==================== PROBLEMGENERATORER ====================
+      function genAddition(grade) {
+        let a, b, answer, q, display;
+        if (grade <= 1) { a = rand(1, 20); b = rand(1, 20); }
+        else if (grade === 2) { a = rand(10, 99); b = rand(1, 99); }
+        else if (grade <= 4) { a = rand(100, 999); b = rand(10, 999); }
+        else if (grade <= 6) { a = rand(1000, 99999); b = rand(100, 99999); }
+        else { a = rand(10000, 999999); b = rand(1000, 999999); }
+        answer = a + b;
+        if (Math.random() < 0.35 && grade >= 2) {
+          const navn = pick(danskeNavne);
+          q = wordProblem('{navn} har {a} kroner og tjener {b} kroner mere. Hvor mange penge har {navn} nu?', {navn, a, b});
+          display = q.replace('?', '= ___');
+        } else {
+          q = `${a} + ${b} = ?`;
+          display = `${a} + ${b} = ___`;
         }
-
-        function fracDisplay(num, den) {
-            if (den === 1) return `${num}`;
-            return `<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+        return { q, a: answer, display, isGeometry: false };
+      }
+      function genSubtraction(grade) {
+        let a, b, answer, q, display;
+        if (grade <= 1) { a = rand(5, 20); b = rand(1, a); }
+        else if (grade === 2) { a = rand(20, 99); b = rand(1, a); }
+        else if (grade <= 4) { a = rand(100, 999); b = rand(10, a); }
+        else if (grade <= 6) { a = rand(1000, 99999); b = rand(100, a); }
+        else { a = rand(10000, 999999); b = rand(1000, a); }
+        answer = a - b;
+        if (Math.random() < 0.35 && grade >= 2) {
+          const navn = pick(danskeNavne);
+          q = wordProblem('{navn} har {a} kroner og bruger {b} kroner. Hvor mange penge er der tilbage?', {navn, a, b});
+          display = q.replace('?', '= ___');
+        } else {
+          q = `${a} − ${b} = ?`;
+          display = `${a} − ${b} = ___`;
         }
-
-        // ============================================================
-        //  ROBUST DRAWING FUNCTIONS - med korrekt skalering og position
-        // ============================================================
-
-        function drawRectangle(l, w, labelL, labelW) {
-            // Brug 90% af viewBox til figuren, så labels har plads
-            const maxDim = Math.max(l, w);
-            const scale = 105 / maxDim;
-            const rectW = l * scale;
-            const rectH = w * scale;
-            const x = (140 - rectW) / 2;
-            const y = (140 - rectH) / 2;
-            const size = 8;
-            return `
-            <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-                <rect x="${x}" y="${y}" width="${rectW}" height="${rectH}" fill="#dbeafe" stroke="#1e293b" stroke-width="2" rx="2" />
-                <polyline points="${x+size},${y+rectH} ${x+size},${y+rectH-size} ${x},${y+rectH-size}" fill="none" stroke="#1e293b" stroke-width="1.5" />
-                <line x1="${x}" y1="${y+rectH+8}" x2="${x+rectW}" y2="${y+rectH+8}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1.5" />
-                <line x1="${x+rectW+8}" y1="${y}" x2="${x+rectW+8}" y2="${y+rectH}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1.5" />
-                <text x="${x+rectW/2}" y="${y+rectH+20}" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">${labelL}</text>
-                <text x="${x+rectW+22}" y="${y+rectH/2+4}" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">${labelW}</text>
-            </svg>
-            `;
+        return { q, a: answer, display, isGeometry: false };
+      }
+      function genMultiplication(grade) {
+        let a, b, answer, q, display;
+        if (grade <= 2) { a = rand(1, 10); b = rand(1, 10); }
+        else if (grade <= 3) { a = rand(2, 10); b = rand(2, 10); }
+        else if (grade <= 4) { a = rand(10, 99); b = rand(2, 9); }
+        else if (grade <= 6) { a = rand(100, 999); b = rand(2, 20); }
+        else { a = rand(1000, 9999); b = rand(10, 99); }
+        answer = a * b;
+        if (Math.random() < 0.3 && grade >= 3) {
+          const navn = pick(danskeNavne);
+          q = wordProblem('{navn} køber {b} poser med {a} karameller i hver. Hvor mange karameller er der i alt?', {navn, a, b});
+          display = q.replace('?', '= ___');
+        } else {
+          q = `${a} · ${b} = ?`;
+          display = `${a} · ${b} = ___`;
         }
-
-        function drawTriangle(base, height, labelBase, labelHeight) {
-            const maxDim = Math.max(base, height);
-            const scale = 105 / maxDim;
-            const b = base * scale;
-            const h = height * scale;
-            const cx = 70,
-                cy = 105;
-            const x1 = cx - b / 2,
-                y1 = cy;
-            const x2 = cx + b / 2,
-                y2 = cy;
-            const x3 = cx,
-                y3 = cy - h;
-            const size = 8;
-            return `
-            <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="#dbeafe" stroke="#1e293b" stroke-width="2" />
-                <line x1="${x3}" y1="${y1}" x2="${x3}" y2="${y3}" stroke="#1e293b" stroke-dasharray="4,4" stroke-width="1.5" />
-                <polyline points="${x3+size},${y1} ${x3+size},${y1-size} ${x3},${y1-size}" fill="none" stroke="#1e293b" stroke-width="1.5" />
-                <line x1="${x1}" y1="${y1+8}" x2="${x2}" y2="${y1+8}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1.5" />
-                <text x="${cx}" y="${y1+20}" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">${labelBase}</text>
-                <text x="${cx+16}" y="${cy - h/2 + 5}" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">${labelHeight}</text>
-            </svg>
-            `;
+        return { q, a: answer, display, isGeometry: false };
+      }
+      function genDivision(grade) {
+        let divisor, quotient, answer, q, display;
+        if (grade <= 3) { divisor = rand(2, 10); quotient = rand(1, 10); }
+        else if (grade <= 5) { divisor = rand(2, 9); quotient = rand(5, 30); }
+        else { divisor = rand(3, 25); quotient = rand(10, 100); }
+        const dividend = divisor * quotient;
+        answer = quotient;
+        if (Math.random() < 0.3 && grade >= 4) {
+          const navn = pick(danskeNavne);
+          q = wordProblem('{navn} har {a} æbler og deler dem ligeligt mellem {b} venner. Hvor mange får hver?', {navn, a: dividend, b: divisor});
+          display = q.replace('?', '= ___');
+        } else {
+          q = `${dividend} ÷ ${divisor} = ?`;
+          display = `${dividend} ÷ ${divisor} = ___`;
         }
-
-        function drawCircle(radius, label) {
-            // Sørg for at cirklen altid passer i viewBox
-            const scale = 60 / radius;
-            const r = radius * scale;
-            const cx = 70,
-                cy = 70;
-            return `
-            <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="${cx}" cy="${cy}" r="${r}" fill="#dbeafe" stroke="#1e293b" stroke-width="2" />
-                <line x1="${cx}" y1="${cy}" x2="${cx + r}" y2="${cy}" stroke="#1e293b" stroke-width="2" />
-                <line x1="${cx - r}" y1="${cy}" x2="${cx + r}" y2="${cy}" stroke="#1e293b" stroke-dasharray="4,4" stroke-width="1.5" />
-                <circle cx="${cx}" cy="${cy}" r="2.5" fill="#1e293b" />
-                <text x="${cx + r/2}" y="${cy - 12}" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">${label}</text>
-            </svg>
-            `;
+        return { q, a: answer, display, isGeometry: false };
+      }
+      function genFractionsIntro(grade) {
+        const den = rand(2, 8);
+        const num = rand(1, den - 1);
+        const sim = simplifyFraction(num, den);
+        const q = `Hvor stor en brøkdel er farvet hvis ${num} ud af ${den} dele er taget?`;
+        const display = `${num}/${den} = ___`;
+        return { q, a: sim.d === 1 ? `${sim.n}` : `${sim.n}/${sim.d}`, display, isGeometry: false, rawAnswer: sim };
+      }
+      function genFractionsAddSub(grade) {
+        const maxD = grade <= 4 ? 6 : grade <= 6 ? 10 : 16;
+        let d1 = rand(2, maxD), n1 = rand(1, d1 - 1), d2 = rand(2, maxD), n2 = rand(1, d2 - 1);
+        const op = pick(['+', '−']);
+        if (op === '−' && n1 * d2 < n2 * d1)[n1, d1, n2, d2] = [n2, d2, n1, d1];
+        const num = op === '+' ? n1 * d2 + n2 * d1 : n1 * d2 - n2 * d1;
+        const den = d1 * d2;
+        const sim = simplifyFraction(num, den);
+        const ansStr = sim.d === 1 ? `${sim.n}` : `${sim.n}/${sim.d}`;
+        return { q: `${n1}/${d1} ${op} ${n2}/${d2} = ?`, a: ansStr, display: `${fracDisplay(n1,d1)} ${op} ${fracDisplay(n2,d2)} = ___`, isGeometry: false, rawAnswer: sim };
+      }
+      function genFractionsMulDiv(grade) {
+        const maxD = grade <= 5 ? 8 : 12;
+        let d1 = rand(2, maxD), n1 = rand(1, d1 - 1), d2 = rand(2, maxD), n2 = rand(1, d2 - 1);
+        const op = pick(['·', '÷']);
+        const num = op === '·' ? n1 * n2 : n1 * d2;
+        const den = op === '·' ? d1 * d2 : d1 * n2;
+        const sim = simplifyFraction(num, den);
+        const ansStr = sim.d === 1 ? `${sim.n}` : `${sim.n}/${sim.d}`;
+        return { q: `${n1}/${d1} ${op} ${n2}/${d2} = ?`, a: ansStr, display: `${fracDisplay(n1,d1)} ${op} ${fracDisplay(n2,d2)} = ___`, isGeometry: false, rawAnswer: sim };
+      }
+      function genDecimalsAddSub(grade) {
+        const dec = grade <= 4 ? 1 : 2;
+        const maxV = grade <= 4 ? 10 : grade <= 6 ? 100 : 1000;
+        const a = parseFloat((Math.random() * maxV).toFixed(dec));
+        const b = parseFloat((Math.random() * maxV).toFixed(dec));
+        const op = pick(['+', '−']);
+        const res = op === '+' ? a + b : Math.max(a, b) - Math.min(a, b);
+        return { q: `${a.toFixed(dec)} ${op} ${b.toFixed(dec)} = ?`, a: res.toFixed(dec), display: `${a.toFixed(dec)} ${op} ${b.toFixed(dec)} = ___`, isGeometry: false };
+      }
+      function genDecimalsMulDiv(grade) {
+        const dec = grade <= 5 ? 1 : 2;
+        const a = parseFloat((Math.random() * 15 + 0.5).toFixed(dec));
+        const b = parseFloat((Math.random() * 5 + 0.5).toFixed(dec));
+        const op = pick(['·', '÷']);
+        const res = op === '·' ? a * b : a / b;
+        return { q: `${a.toFixed(dec)} ${op} ${b.toFixed(dec)} = ?`, a: res.toFixed(dec * 2), display: `${a.toFixed(dec)} ${op} ${b.toFixed(dec)} = ___`, isGeometry: false };
+      }
+      function genPercentages(grade) {
+        const p = rand(5, 50);
+        const v = grade <= 5 ? rand(50, 200) : rand(100, 1000);
+        const res = (p / 100 * v).toFixed(2);
+        return { q: `${p}% af ${v} = ?`, a: res, display: `${p}% af ${v} = ___`, isGeometry: false };
+      }
+      function genPowers(grade) {
+        const b = rand(2, grade <= 7 ? 6 : 12);
+        const e = rand(2, grade <= 7 ? 3 : 5);
+        return { q: `${b}^${e} = ?`, a: Math.pow(b, e), display: `${b}^${e} = ___`, isGeometry: false };
+      }
+      function genSquareroot(grade) {
+        const r = rand(2, grade <= 7 ? 10 : 20);
+        return { q: `√${r*r} = ?`, a: r, display: `√${r*r} = ___`, isGeometry: false };
+      }
+      function genNegativeAddSub(grade) {
+        const range = grade <= 6 ? 20 : 50;
+        const a = rand(-range, range), b = rand(-range, range);
+        const op = pick(['+', '−']);
+        return { q: `${a} ${op} (${b}) = ?`, a: op === '+' ? a + b : a - b, display: `${a} ${op} (${b}) = ___`, isGeometry: false };
+      }
+      function genNegativeMulDiv(grade) {
+        const range = grade <= 7 ? 12 : 30;
+        const a = rand(-range, range); let b = rand(-range, range); if (b === 0) b = 1;
+        const op = pick(['·', '÷']);
+        const res = op === '·' ? a * b : Math.round((a / b) * 100) / 100;
+        return { q: `${a} ${op} (${b}) = ?`, a: res, display: `${a} ${op} (${b}) = ___`, isGeometry: false };
+      }
+      function genOrderOps(grade) {
+        const a = rand(2, grade <= 5 ? 10 : 20), b = rand(2, grade <= 5 ? 10 : 20), c = rand(2, grade <= 5 ? 5 : 10);
+        return { q: `(${a} + ${b}) · ${c} = ?`, a: (a + b) * c, display: `(${a} + ${b}) · ${c} = ___`, isGeometry: false };
+      }
+      function genAlgebraBasic(grade) {
+        const a = rand(1, grade <= 6 ? 5 : 15), b = rand(1, grade <= 6 ? 5 : 15), x = rand(1, grade <= 6 ? 5 : 10);
+        return { q: `Beregn ${a}x + ${b} når x = ${x}`, a: a * x + b, display: `${a}·${x} + ${b} = ___`, isGeometry: false };
+      }
+      function genEquations(grade) {
+        const a = rand(2, grade <= 7 ? 6 : 15), x = rand(1, grade <= 7 ? 8 : 20), b = rand(1, grade <= 7 ? 10 : 30);
+        return { q: `Løs: ${a}x + ${b} = ${a*x+b}`, a: x, display: `${a}x + ${b} = ${a*x+b} → x = ___`, isGeometry: false };
+      }
+      function genQuadraticEq(grade) {
+        const x1 = rand(-8, 8), x2 = rand(-8, 8);
+        const b = -(x1 + x2), c = x1 * x2;
+        const signB = b >= 0 ? '+ ' : '− ', signC = c >= 0 ? '+ ' : '− ';
+        return { q: `Løs: x² ${signB}${Math.abs(b)}x ${signC}${Math.abs(c)} = 0`, a: `${x1}, ${x2}`, display: `x² ${signB}${Math.abs(b)}x ${signC}${Math.abs(c)} = 0 → x = ___`, isGeometry: false };
+      }
+      function genStatistics(grade) {
+        const data = Array.from({ length: 5 }, () => rand(1, grade <= 5 ? 30 : 100));
+        const mean = (data.reduce((a, b) => a + b, 0) / 5).toFixed(1);
+        const sorted = [...data].sort((a, b) => a - b);
+        return { q: `Find gennemsnit og median af: ${data.join(', ')}`, a: `gns: ${mean}, median: ${sorted[2]}`, display: `Data: ${data.join(', ')} → gns = ___, median = ___`, isGeometry: false };
+      }
+      function genProbability(grade) {
+        const total = pick([6, 8, 10, 12, 20]);
+        const fav = rand(1, total - 1);
+        const sim = simplifyFraction(fav, total);
+        return { q: `Sandsynlighed for at trække ${fav} gunstige ud af ${total} mulige?`, a: `${sim.n}/${sim.d}`, display: `P = ___`, isGeometry: false };
+      }
+      function genGeometryArea(grade) {
+        const shape = pick(['rektangel', 'trekant', 'cirkel']);
+        if (shape === 'rektangel') {
+          const l = rand(2, grade <= 4 ? 8 : 20), w = rand(2, grade <= 4 ? 6 : 15);
+          return { q: `Areal af rektangel med længde ${l} og bredde ${w}?`, a: l*w, display: `Areal = ${l}·${w} = ___`, drawing: drawRectangle(l,w,'l','b'), isGeometry: true };
+        } else if (shape === 'trekant') {
+          const g = rand(2, 10), h = rand(2, 10);
+          return { q: `Areal af trekant med grundlinje ${g} og højde ${h}?`, a: 0.5*g*h, display: `Areal = ½·${g}·${h} = ___`, drawing: drawTriangle(g,h,'g','h'), isGeometry: true };
+        } else {
+          const r = rand(2, 6);
+          return { q: `Areal af cirkel med radius ${r}? (π≈3,14)`, a: (Math.PI*r*r).toFixed(2), display: `Areal = π·${r}² ≈ ___`, drawing: drawCircle(r,'r'), isGeometry: true };
         }
-
-        function drawBox(l, w, h, labelL, labelW, labelH) {
-            // Isometrisk 3D kasse med robust skalering
-            const maxDim = Math.max(l, w, h);
-            const scale = 55 / maxDim;
-            const a = l * scale; // længde (dybde)
-            const b = w * scale; // bredde
-            const c = h * scale; // højde
-
-            // Centrer i viewBox
-            const viewW = 140,
-                viewH = 140;
-            // Isometrisk offset
-            const dx = a * 0.75;
-            const dy = -a * 0.4;
-
-            // Positioner frontfladen i midten
-            const fw = b;
-            const fh = c;
-            const fx = (viewW - fw - dx) / 2;
-            const fy = (viewH - fh + dy) / 2;
-
-            // Topflade: forskydning op og til højre
-            const tx = fx + dx;
-            const ty = fy + dy;
-
-            return `
-            <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-                <!-- Sideflade (højre) -->
-                <polygon points="${fx+fw},${fy} ${fx+fw},${fy+fh} ${fx+fw+dx},${fy+fh+dy} ${fx+fw+dx},${fy+dy}" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.5" />
-                <!-- Topflade -->
-                <polygon points="${fx},${fy} ${fx+fw},${fy} ${fx+fw+dx},${fy+dy} ${fx+dx},${fy+dy}" fill="#dbeafe" stroke="#1e293b" stroke-width="1.5" />
-                <!-- Frontflade -->
-                <rect x="${fx}" y="${fy}" width="${fw}" height="${fh}" fill="#bfdbfe" stroke="#1e293b" stroke-width="1.5" rx="1" />
-
-                <!-- Labels -->
-                <text x="${fx + fw/2}" y="${fy + fh + 18}" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">${labelW}</text>
-                <text x="${fx - 14}" y="${fy + fh/2 + 4}" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" transform="rotate(-90, ${fx-14}, ${fy+fh/2+4})">${labelH}</text>
-                <text x="${fx + fw + dx/2 + 10}" y="${fy + dy/2 + fh/2 + 4}" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" transform="rotate(-28, ${fx + fw + dx/2 + 10}, ${fy + dy/2 + fh/2 + 4})">${labelL}</text>
-            </svg>
-            `;
+      }
+      function genGeometryPerimeter(grade) {
+        const shape = pick(['rektangel', 'cirkel']);
+        if (shape === 'rektangel') {
+          const l = rand(2, 10), w = rand(2, 10);
+          return { q: `Omkreds af rektangel med længde ${l} og bredde ${w}?`, a: 2*(l+w), display: `Omkreds = 2·(${l}+${w}) = ___`, drawing: drawRectangle(l,w,'l','b'), isGeometry: true };
+        } else {
+          const r = rand(2, 6);
+          return { q: `Omkreds af cirkel med radius ${r}? (π≈3,14)`, a: (2*Math.PI*r).toFixed(2), display: `Omkreds = 2·π·${r} ≈ ___`, drawing: drawCircle(r,'r'), isGeometry: true };
         }
+      }
+      function genGeometryVolume(grade) {
+        const l = rand(2, 6), w = rand(2, 6), h = rand(2, 6);
+        return { q: `Rumfang af kasse med længde ${l}, bredde ${w} og højde ${h}?`, a: l*w*h, display: `Rumfang = ${l}·${w}·${h} = ___`, drawing: drawBox(l,w,h,'l','b','h'), isGeometry: true };
+      }
+      function genGeometryPythagoras(grade) {
+        let a, b, c;
+        do { a = rand(3, 12); b = rand(3, 12); c = Math.sqrt(a*a + b*b); } while (!Number.isInteger(c) || c > 20);
+        return { q: `I en retvinklet trekant er kateterne ${a} og ${b}. Find hypotenusen.`, a: c, display: `c² = ${a}²+${b}² → c = ___`, drawing: drawPythagoras(a,b,c), isGeometry: true };
+      }
+      function genTrigonometry(grade) {
+        let a, b, c;
+        do { a = rand(3, 10); b = rand(3, 10); c = Math.sqrt(a*a + b*b); } while (!Number.isInteger(c) || c > 18);
+        const angA = Math.round(Math.asin(a/c)*180/Math.PI);
+        const func = pick(['sin','cos','tan']);
+        const angle = angA;
+        const ans = func==='sin' ? (a/c).toFixed(3) : func==='cos' ? (b/c).toFixed(3) : (a/b).toFixed(3);
+        return { q: `I retvinklet trekant (a=${a}, b=${b}, c=${c}): ${func}(${angle}°) = ?`, a: ans, display: `${func}(${angle}°) = ___`, drawing: drawRightTriangleTrig(a,b,c,angA,90-angA), isGeometry: true };
+      }
 
-        // ============================================================
-        //  PEDAGOGICAL GEOMETRY GENERATORS
-        // ============================================================
-        const geometryGenerators = {
+      const generatorMap = {
+        addition: genAddition, subtraction: genSubtraction, multiplication: genMultiplication, division: genDivision,
+        fractions_intro: genFractionsIntro, fractions_addsub: genFractionsAddSub, fractions_muldiv: genFractionsMulDiv,
+        decimals_addsub: genDecimalsAddSub, decimals_muldiv: genDecimalsMulDiv, percentages: genPercentages,
+        powers: genPowers, squareroot: genSquareroot, negative_addsub: genNegativeAddSub, negative_muldiv: genNegativeMulDiv,
+        order_ops: genOrderOps, algebra_basic: genAlgebraBasic, equations: genEquations, quadratic_eq: genQuadraticEq,
+        geometry_area: genGeometryArea, geometry_perimeter: genGeometryPerimeter, geometry_volume: genGeometryVolume,
+        geometry_pythagoras: genGeometryPythagoras, trigonometry: genTrigonometry, statistics: genStatistics, probability: genProbability
+      };
 
-            rectangle: function(grade) {
-                let l, w;
-                if (grade <= 5) { l = rand(2, 10);
-                    w = rand(2, 10); } else if (grade <= 7) { l = rand(5, 20);
-                    w = rand(5, 20); } else { l = rand(10, 50);
-                    w = rand(10, 50); }
-                const variant = pick(['area', 'perimeter', 'missing_length', 'missing_width']);
-                let question, answer, displayText, drawing;
-                if (variant === 'area') {
-                    const area = l * w;
-                    question = `Hvad er arealet af et rektangel med længde ${l} og bredde ${w}?`;
-                    answer = area;
-                    displayText = `Areal = ${l} · ${w} = ___`;
-                    drawing = drawRectangle(l, w, 'l', 'b');
-                } else if (variant === 'perimeter') {
-                    const perim = 2 * (l + w);
-                    question = `Hvad er omkredsen af et rektangel med længde ${l} og bredde ${w}?`;
-                    answer = perim;
-                    displayText = `Omkreds = 2·(${l}+${w}) = ___`;
-                    drawing = drawRectangle(l, w, 'l', 'b');
-                } else if (variant === 'missing_length') {
-                    const area = l * w;
-                    const missing = l;
-                    question = `Et rektangel har areal ${area} og bredde ${w}. Hvad er længden?`;
-                    answer = missing;
-                    displayText = `Areal = ${area}, bredde = ${w}  →  længde = ___`;
-                    drawing = drawRectangle(l, w, '?', 'b');
-                } else {
-                    const area = l * w;
-                    const missing = w;
-                    question = `Et rektangel har areal ${area} og længde ${l}. Hvad er bredden?`;
-                    answer = missing;
-                    displayText = `Areal = ${area}, længde = ${l}  →  bredde = ___`;
-                    drawing = drawRectangle(l, w, 'l', '?');
-                }
-                return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-            },
-
-            triangle: function(grade) {
-                let b, h;
-                if (grade <= 5) { b = rand(2, 10);
-                    h = rand(2, 10); } else if (grade <= 7) { b = rand(5, 20);
-                    h = rand(5, 20); } else { b = rand(10, 40);
-                    h = rand(10, 40); }
-                const variant = pick(['area', 'missing_base', 'missing_height']);
-                if (variant === 'area') {
-                    const area = 0.5 * b * h;
-                    const question = `Hvad er arealet af en trekant med grundlinje ${b} og højde ${h}?`;
-                    const answer = area;
-                    const displayText = `Areal = ½ · ${b} · ${h} = ___`;
-                    const drawing = drawTriangle(b, h, 'g', 'h');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                } else if (variant === 'missing_base') {
-                    const area = 0.5 * b * h;
-                    const missing = b;
-                    const question = `En trekant har areal ${area} og højde ${h}. Hvad er grundlinjen?`;
-                    const answer = missing;
-                    const displayText = `Areal = ${area}, højde = ${h}  →  grundlinje = ___`;
-                    const drawing = drawTriangle(b, h, '?', 'h');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                } else {
-                    const area = 0.5 * b * h;
-                    const missing = h;
-                    const question = `En trekant har areal ${area} og grundlinje ${b}. Hvad er højden?`;
-                    const answer = missing;
-                    const displayText = `Areal = ${area}, grundlinje = ${b}  →  højde = ___`;
-                    const drawing = drawTriangle(b, h, 'g', '?');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                }
-            },
-
-            circle: function(grade) {
-                let r;
-                if (grade <= 5) r = rand(2, 6);
-                else if (grade <= 7) r = rand(3, 10);
-                else r = rand(5, 20);
-                const variant = pick(['area', 'circumference', 'radius_from_area', 'radius_from_circ']);
-                if (variant === 'area') {
-                    const approx = (3.14 * r * r).toFixed(2);
-                    const question = `Hvad er arealet af en cirkel med radius ${r}? (brug π ≈ 3,14)`;
-                    const answer = approx;
-                    const displayText = `Areal = π · ${r}² ≈ ___`;
-                    const drawing = drawCircle(r, 'r');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                } else if (variant === 'circumference') {
-                    const approx = (2 * 3.14 * r).toFixed(2);
-                    const question = `Hvad er omkredsen af en cirkel med radius ${r}? (brug π ≈ 3,14)`;
-                    const answer = approx;
-                    const displayText = `Omkreds = 2·π·${r} ≈ ___`;
-                    const drawing = drawCircle(r, 'r');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                } else if (variant === 'radius_from_area') {
-                    const approxArea = (3.14 * r * r).toFixed(2);
-                    const question = `En cirkel har areal ${approxArea}. Hvad er radius? (brug π ≈ 3,14)`;
-                    const answer = r;
-                    const displayText = `Areal = ${approxArea}  →  radius = ___`;
-                    const drawing = drawCircle(r, '?');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                } else {
-                    const approxCirc = (2 * 3.14 * r).toFixed(2);
-                    const question = `En cirkel har omkreds ${approxCirc}. Hvad er radius? (brug π ≈ 3,14)`;
-                    const answer = r;
-                    const displayText = `Omkreds = ${approxCirc}  →  radius = ___`;
-                    const drawing = drawCircle(r, '?');
-                    return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-                }
-            },
-
-            box: function(grade) {
-                let l, w, h;
-                if (grade <= 6) { l = rand(2, 6);
-                    w = rand(2, 6);
-                    h = rand(2, 6); } else if (grade <= 8) { l = rand(3, 12);
-                    w = rand(3, 12);
-                    h = rand(3, 12); } else { l = rand(5, 20);
-                    w = rand(5, 20);
-                    h = rand(5, 20); }
-                const vol = l * w * h;
-                const question = `Hvad er rumfanget af en kasse med længde ${l}, bredde ${w} og højde ${h}?`;
-                const answer = vol;
-                const displayText = `Rumfang = ${l}·${w}·${h} = ___`;
-                const drawing = drawBox(l, w, h, 'l', 'b', 'h');
-                return { q: question, a: answer, display: displayText, drawing: drawing, isGeometry: true };
-            }
-        };
-
-        function generateGeometryProblem(grade, topic) {
-            const shapeMap = {
-                'geometry_area': ['rectangle', 'triangle', 'circle'],
-                'geometry_perimeter': ['rectangle', 'circle'],
-                'geometry_volume': ['box']
-            };
-            let shapes = shapeMap[topic] || ['rectangle'];
-            const shape = pick(shapes);
-            const gen = geometryGenerators[shape];
-            if (gen) {
-                let result = gen(grade);
-                return result;
-            }
-            return { q: '?', a: '?', display: '___', drawing: '', isGeometry: false };
+      function generateProblem(grade, topic) {
+        const gen = generatorMap[topic];
+        if (gen) {
+          const res = gen(grade);
+          res.drawing = res.drawing || '';
+          res.isGeometry = res.isGeometry || false;
+          if (!res.display) res.display = res.q;
+          return res;
         }
+        return { q: '?', a: '?', display: '___', drawing: '', isGeometry: false };
+      }
 
-        // ============================================================
-        //  BASIC GENERATORS (non-geometry) - forkortet for plads
-        // ============================================================
-        const basicGenerators = {
-            addition: function(grade) {
-                let a, b, min1, max1, min2, max2;
-                if (grade <= 1) { min1 = 1;
-                    max1 = 10;
-                    min2 = 1;
-                    max2 = 10; } else if (grade === 2) { min1 = 1;
-                    max1 = 25;
-                    min2 = 1;
-                    max2 = 25; } else if (grade === 3) { min1 = 1;
-                    max1 = 50;
-                    min2 = 1;
-                    max2 = 50; } else if (grade === 4) { min1 = 1;
-                    max1 = 100;
-                    min2 = 1;
-                    max2 = 100; } else if (grade === 5) { min1 = 1;
-                    max1 = 500;
-                    min2 = 1;
-                    max2 = 500; } else if (grade === 6) { min1 = 1;
-                    max1 = 1000;
-                    min2 = 1;
-                    max2 = 1000; } else if (grade === 7) { min1 = 1;
-                    max1 = 5000;
-                    min2 = 1;
-                    max2 = 5000; } else { min1 = 1;
-                    max1 = 10000;
-                    min2 = 1;
-                    max2 = 10000; }
-                a = rand(min1, max1);
-                b = rand(min2, max2);
-                return { q: `${a} + ${b} = ?`, a: a + b, display: `${a} + ${b} = ___`, drawing: '', isGeometry: false };
-            },
-            subtraction: function(grade) {
-                let a, b, min1, max1, min2, max2;
-                if (grade <= 1) { min1 = 1;
-                    max1 = 20;
-                    min2 = 1;
-                    max2 = 10; } else if (grade === 2) { min1 = 1;
-                    max1 = 50;
-                    min2 = 1;
-                    max2 = 25; } else if (grade === 3) { min1 = 1;
-                    max1 = 100;
-                    min2 = 1;
-                    max2 = 50; } else if (grade === 4) { min1 = 1;
-                    max1 = 200;
-                    min2 = 1;
-                    max2 = 100; } else if (grade === 5) { min1 = 1;
-                    max1 = 500;
-                    min2 = 1;
-                    max2 = 250; } else if (grade === 6) { min1 = 1;
-                    max1 = 1000;
-                    min2 = 1;
-                    max2 = 500; } else if (grade === 7) { min1 = 1;
-                    max1 = 5000;
-                    min2 = 1;
-                    max2 = 2500; } else { min1 = 1;
-                    max1 = 10000;
-                    min2 = 1;
-                    max2 = 5000; }
-                a = rand(min1, max1);
-                b = rand(min2, Math.min(max2, a));
-                while (b > a) b = rand(min2, Math.min(max2, a));
-                return { q: `${a} − ${b} = ?`, a: a - b, display: `${a} − ${b} = ___`, drawing: '', isGeometry: false };
-            },
-            multiplication: function(grade) {
-                let a, b, min1, max1, min2, max2;
-                if (grade <= 1) { min1 = 1;
-                    max1 = 5;
-                    min2 = 1;
-                    max2 = 5; } else if (grade === 2) { min1 = 1;
-                    max1 = 10;
-                    min2 = 1;
-                    max2 = 10; } else if (grade === 3) { min1 = 1;
-                    max1 = 12;
-                    min2 = 1;
-                    max2 = 12; } else if (grade === 4) { min1 = 10;
-                    max1 = 99;
-                    min2 = 2;
-                    max2 = 9; } else if (grade === 5) { min1 = 10;
-                    max1 = 99;
-                    min2 = 10;
-                    max2 = 99; } else if (grade === 6) { min1 = 100;
-                    max1 = 999;
-                    min2 = 10;
-                    max2 = 99; } else if (grade === 7) { min1 = 100;
-                    max1 = 999;
-                    min2 = 100;
-                    max2 = 999; } else if (grade === 8) { min1 = 1000;
-                    max1 = 9999;
-                    min2 = 10;
-                    max2 = 99; } else { min1 = 1000;
-                    max1 = 9999;
-                    min2 = 100;
-                    max2 = 999; }
-                a = rand(min1, max1);
-                b = rand(min2, max2);
-                return { q: `${a} · ${b} = ?`, a: a * b, display: `${a} · ${b} = ___`, drawing: '', isGeometry: false };
-            },
-            division: function(grade) {
-                let divisor, quotient, minDiv, maxDiv, minQuot, maxQuot;
-                if (grade <= 1) { minDiv = 1;
-                    maxDiv = 5;
-                    minQuot = 1;
-                    maxQuot = 5; } else if (grade === 2) { minDiv = 1;
-                    maxDiv = 10;
-                    minQuot = 1;
-                    maxQuot = 10; } else if (grade === 3) { minDiv = 1;
-                    maxDiv = 12;
-                    minQuot = 1;
-                    maxQuot = 12; } else if (grade === 4) { minDiv = 2;
-                    maxDiv = 9;
-                    minQuot = 10;
-                    maxQuot = 99; } else if (grade === 5) { minDiv = 10;
-                    maxDiv = 99;
-                    minQuot = 10;
-                    maxQuot = 99; } else if (grade === 6) { minDiv = 10;
-                    maxDiv = 99;
-                    minQuot = 100;
-                    maxQuot = 999; } else if (grade === 7) { minDiv = 10;
-                    maxDiv = 999;
-                    minQuot = 10;
-                    maxQuot = 999; } else if (grade === 8) { minDiv = 10;
-                    maxDiv = 999;
-                    minQuot = 100;
-                    maxQuot = 9999; } else { minDiv = 10;
-                    maxDiv = 9999;
-                    minQuot = 100;
-                    maxQuot = 99999; }
-                divisor = rand(minDiv, maxDiv);
-                quotient = rand(minQuot, maxQuot);
-                const dividend = divisor * quotient;
-                return { q: `${dividend} ÷ ${divisor} = ?`, a: quotient, display: `${dividend} ÷ ${divisor} = ___`,
-                    drawing: '', isGeometry: false };
-            },
-            fractions_addsub: function(grade) {
-                let maxDen, maxNum;
-                if (grade <= 3) { maxDen = 6;
-                    maxNum = 6; } else if (grade <= 5) { maxDen = 12;
-                    maxNum = 12; } else { maxDen = 20;
-                    maxNum = 20; }
-                let d1 = rand(2, maxDen);
-                let n1 = rand(1, maxNum);
-                let d2 = rand(2, maxDen);
-                let n2 = rand(1, maxNum);
-                if (grade <= 3) { while (n1 >= d1) n1 = rand(1, maxNum - 1); while (n2 >= d2) n2 = rand(1, maxNum - 1); }
-                const op = pick(['+', '−']);
-                let num, den;
-                if (op === '+') {
-                    num = n1 * d2 + n2 * d1;
-                    den = d1 * d2;
-                } else {
-                    if (n1 * d2 < n2 * d1) { [n1, d1, n2, d2] = [n2, d2, n1, d1]; }
-                    num = n1 * d2 - n2 * d1;
-                    den = d1 * d2;
-                }
-                const simp = simplifyFraction(num, den);
-                const display = `${fracDisplay(n1,d1)} ${op} ${fracDisplay(n2,d2)} = ___`;
-                const answer = simp.d === 1 ? `${simp.n}` : `${simp.n}/${simp.d}`;
-                return {
-                    q: `${n1}/${d1} ${op} ${n2}/${d2} = ?`,
-                    a: answer,
-                    display: display,
-                    drawing: '',
-                    isGeometry: false,
-                    rawAnswer: { n: simp.n, d: simp.d }
-                };
-            },
-            fractions_muldiv: function(grade) {
-                let maxDen, maxNum;
-                if (grade <= 4) { maxDen = 8;
-                    maxNum = 8; } else if (grade <= 6) { maxDen = 12;
-                    maxNum = 12; } else { maxDen = 20;
-                    maxNum = 20; }
-                let d1 = rand(2, maxDen);
-                let n1 = rand(1, maxNum);
-                let d2 = rand(2, maxDen);
-                let n2 = rand(1, maxNum);
-                if (grade <= 4) { while (n1 >= d1) n1 = rand(1, maxNum - 1); while (n2 >= d2) n2 = rand(1, maxNum - 1); }
-                const op = pick(['·', '÷']);
-                let num, den;
-                if (op === '·') {
-                    num = n1 * n2;
-                    den = d1 * d2;
-                } else {
-                    num = n1 * d2;
-                    den = d1 * n2;
-                }
-                const simp = simplifyFraction(num, den);
-                const display = `${fracDisplay(n1,d1)} ${op} ${fracDisplay(n2,d2)} = ___`;
-                const answer = simp.d === 1 ? `${simp.n}` : `${simp.n}/${simp.d}`;
-                return {
-                    q: `${n1}/${d1} ${op} ${n2}/${d2} = ?`,
-                    a: answer,
-                    display: display,
-                    drawing: '',
-                    isGeometry: false,
-                    rawAnswer: { n: simp.n, d: simp.d }
-                };
-            },
-            decimals_addsub: function(grade) {
-                let maxVal, decimals;
-                if (grade <= 3) { maxVal = 10;
-                    decimals = 1; } else if (grade <= 5) { maxVal = 100;
-                    decimals = 2; } else { maxVal = 1000;
-                    decimals = 2; }
-                const a = parseFloat((Math.random() * maxVal).toFixed(decimals));
-                const b = parseFloat((Math.random() * maxVal).toFixed(decimals));
-                const op = pick(['+', '−']);
-                let result;
-                if (op === '+') result = a + b;
-                else { result = a - b; if (result < 0) { return basicGenerators.decimals_addsub(grade); } }
-                const display = `${a.toFixed(decimals)} ${op} ${b.toFixed(decimals)} = ___`;
-                return { q: `${a.toFixed(decimals)} ${op} ${b.toFixed(decimals)} = ?`, a: result.toFixed(decimals),
-                    display: display, drawing: '', isGeometry: false };
-            },
-            decimals_muldiv: function(grade) {
-                let maxVal, decimals;
-                if (grade <= 4) { maxVal = 10;
-                    decimals = 1; } else if (grade <= 6) { maxVal = 100;
-                    decimals = 2; } else { maxVal = 1000;
-                    decimals = 2; }
-                const a = parseFloat((Math.random() * maxVal + 0.1).toFixed(decimals));
-                let b;
-                const op = pick(['·', '÷']);
-                if (op === '·') {
-                    b = parseFloat((Math.random() * 10 + 0.1).toFixed(decimals));
-                    const result = a * b;
-                    return { q: `${a.toFixed(decimals)} · ${b.toFixed(decimals)} = ?`, a: result.toFixed(decimals * 2),
-                        display: `${a.toFixed(decimals)} · ${b.toFixed(decimals)} = ___`, drawing: '',
-                    isGeometry: false };
-                } else {
-                    b = parseFloat((Math.random() * 5 + 0.5).toFixed(decimals));
-                    if (b === 0) b = 0.5;
-                    const quotient = a / b;
-                    return { q: `${a.toFixed(decimals)} ÷ ${b.toFixed(decimals)} = ?`, a: quotient.toFixed(decimals * 2),
-                        display: `${a.toFixed(decimals)} ÷ ${b.toFixed(decimals)} = ___`, drawing: '',
-                    isGeometry: false };
-                }
-            },
-            percentages: function(grade) {
-                let maxVal, percentRange;
-                if (grade <= 4) { maxVal = 100;
-                    percentRange = [10, 50]; } else if (grade <= 6) { maxVal = 500;
-                    percentRange = [5, 100]; } else { maxVal = 1000;
-                    percentRange = [1, 200]; }
-                const p = rand(percentRange[0], percentRange[1]);
-                const val = rand(1, maxVal);
-                const result = (p / 100) * val;
-                const display = `${p}% af ${val} = ___`;
-                return { q: `${p}% af ${val} = ?`, a: result.toFixed(2), display: display, drawing: '',
-                isGeometry: false };
-            },
-            powers: function(grade) {
-                let baseMax, expMax;
-                if (grade <= 5) { baseMax = 10;
-                    expMax = 3; } else if (grade <= 7) { baseMax = 20;
-                    expMax = 4; } else { baseMax = 30;
-                    expMax = 5; }
-                const base = rand(2, baseMax);
-                const exp = rand(2, expMax);
-                const result = Math.pow(base, exp);
-                return { q: `${base}^${exp} = ?`, a: result, display: `${base}^${exp} = ___`, drawing: '',
-                    isGeometry: false };
-            },
-            squareroot: function(grade) {
-                let maxRoot;
-                if (grade <= 5) maxRoot = 10;
-                else if (grade <= 7) maxRoot = 30;
-                else maxRoot = 100;
-                const root = rand(1, maxRoot);
-                const square = root * root;
-                return { q: `√${square} = ?`, a: root, display: `√${square} = ___`, drawing: '', isGeometry: false };
-            },
-            negative_addsub: function(grade) {
-                let range;
-                if (grade <= 5) range = 20;
-                else if (grade <= 7) range = 100;
-                else range = 500;
-                const a = rand(-range, range);
-                const b = rand(-range, range);
-                const op = pick(['+', '−']);
-                let result;
-                if (op === '+') result = a + b;
-                else result = a - b;
-                const display = `${a} ${op} ${b} = ___`;
-                return { q: `${a} ${op} ${b} = ?`, a: result, display: display, drawing: '', isGeometry: false };
-            },
-            negative_muldiv: function(grade) {
-                let range;
-                if (grade <= 6) range = 20;
-                else if (grade <= 8) range = 100;
-                else range = 500;
-                const a = rand(-range, range);
-                let b = rand(-range, range);
-                if (b === 0) b = rand(1, range);
-                const op = pick(['·', '÷']);
-                let result;
-                if (op === '·') result = a * b;
-                else { result = a / b; if (!Number.isInteger(result)) result = Math.round(result * 100) / 100; }
-                const display = `${a} ${op} ${b} = ___`;
-                return { q: `${a} ${op} ${b} = ?`, a: result, display: display, drawing: '', isGeometry: false };
-            },
-            order_ops: function(grade) {
-                let a, b, c, ops;
-                if (grade <= 4) {
-                    a = rand(1, 10);
-                    b = rand(1, 10);
-                    c = rand(1, 10);
-                    ops = pick(['+', '−']);
-                    const op2 = pick(['·', '÷']);
-                    let expr, result;
-                    if (ops === '+') {
-                        if (op2 === '·') { expr = `(${a} + ${b}) · ${c}`;
-                            result = (a + b) * c; } else { expr = `(${a} + ${b}) ÷ ${c}`;
-                            result = (a + b) / c; }
-                    } else {
-                        if (op2 === '·') { expr = `(${a} − ${b}) · ${c}`;
-                            result = (a - b) * c; } else { expr = `(${a} − ${b}) ÷ ${c}`;
-                            result = (a - b) / c; }
-                    }
-                    if (!Number.isInteger(result)) result = Math.round(result * 100) / 100;
-                    return { q: `${expr} = ?`, a: result, display: `${expr} = ___`, drawing: '', isGeometry: false };
-                } else {
-                    let a1 = rand(2, 20),
-                        b1 = rand(2, 20),
-                        c1 = rand(2, 20);
-                    const op1 = pick(['+', '−']);
-                    const op2 = pick(['·', '÷']);
-                    let expr, result;
-                    if (op1 === '+') {
-                        if (op2 === '·') { expr = `(${a1} + ${b1}) · ${c1}`;
-                            result = (a1 + b1) * c1; } else { expr = `(${a1} + ${b1}) ÷ ${c1}`;
-                            result = (a1 + b1) / c1; }
-                    } else {
-                        if (op2 === '·') { expr = `(${a1} − ${b1}) · ${c1}`;
-                            result = (a1 - b1) * c1; } else { expr = `(${a1} − ${b1}) ÷ ${c1}`;
-                            result = (a1 - b1) / c1; }
-                    }
-                    if (!Number.isInteger(result)) result = Math.round(result * 100) / 100;
-                    return { q: `${expr} = ?`, a: result, display: `${expr} = ___`, drawing: '', isGeometry: false };
-                }
-            },
-            algebra_simplify: function(grade) {
-                let coeffRange, constRange;
-                if (grade <= 5) { coeffRange = 10;
-                    constRange = 10; } else if (grade <= 7) { coeffRange = 20;
-                    constRange = 20; } else { coeffRange = 50;
-                    constRange = 50; }
-                const a = rand(1, coeffRange);
-                const b = rand(1, coeffRange);
-                const c = rand(1, constRange);
-                const d = rand(1, constRange);
-                const expr = `${a}x + ${c} + ${b}x + ${d}`;
-                const result = `${a+b}x + ${c+d}`;
-                return { q: `Forenkle: ${expr}`, a: result, display: `${expr} = ___`, drawing: '', isGeometry: false };
-            },
-            algebra_evaluate: function(grade) {
-                let coeffRange, constRange, valRange;
-                if (grade <= 5) { coeffRange = 10;
-                    constRange = 10;
-                    valRange = 10; } else if (grade <= 7) { coeffRange = 20;
-                    constRange = 20;
-                    valRange = 20; } else { coeffRange = 50;
-                    constRange = 50;
-                    valRange = 50; }
-                const a = rand(1, coeffRange);
-                const b = rand(1, constRange);
-                const x = rand(1, valRange);
-                const result = a * x + b;
-                return { q: `Beregn ${a}x + ${b} for x = ${x}`, a: result, display: `${a}x + ${b} = ___ (x=${x})`,
-                    drawing: '', isGeometry: false };
-            },
-            equations: function(grade) {
-                let coeffRange, constRange;
-                if (grade <= 5) { coeffRange = 10;
-                    constRange = 10; } else if (grade <= 7) { coeffRange = 20;
-                    constRange = 20; } else { coeffRange = 50;
-                    constRange = 50; }
-                const a = rand(1, coeffRange);
-                const b = rand(1, constRange);
-                const rhs = a * rand(1, 10) + b;
-                const x = (rhs - b) / a;
-                if (!Number.isInteger(x) || x <= 0) return basicGenerators.equations(grade);
-                return { q: `Løs: ${a}x + ${b} = ${rhs}`, a: x, display: `${a}x + ${b} = ${rhs}  →  x = ___`,
-                    drawing: '', isGeometry: false };
-            }
-        };
+      // ==================== UI ====================
+      let currentProblems = [], currentTopics = [], currentCount = 16, currentGrade = 4;
 
-        function generateProblem(grade, topic) {
-            if (topic.startsWith('geometry_')) {
-                return generateGeometryProblem(grade, topic);
-            } else {
-                const gen = basicGenerators[topic];
-                if (gen) {
-                    let result = gen(grade);
-                    if (!result.drawing) result.drawing = '';
-                    if (result.isGeometry === undefined) result.isGeometry = false;
-                    return result;
-                }
-            }
-            return { q: '?', a: '?', display: '___', drawing: '', isGeometry: false };
-        }
-
-        // ============================================================
-        //  BUILD TOPIC CHECKBOXES
-        // ============================================================
-        function buildTopicSelector() {
-            const container = document.getElementById('topicGroupContainer');
-            const groups = {};
-            TOPIC_KEYS.forEach(key => {
-                const g = TOPIC_DEFINITIONS[key].group;
-                if (!groups[g]) groups[g] = [];
-                groups[g].push(key);
-            });
-            let html = '';
-            for (const [group, keys] of Object.entries(groups)) {
-                html += `<span class="group-label">${group}</span>`;
-                keys.forEach(key => {
-                    const label = TOPIC_DEFINITIONS[key].label;
-                    html += `
-                        <label>
-                            <input type="checkbox" class="topic-checkbox" value="${key}" checked />
-                            ${label}
-                        </label>
-                    `;
-                });
-            }
-            container.innerHTML = html;
-            updateTopicCount();
-            document.querySelectorAll('.topic-checkbox').forEach(cb => {
-                cb.addEventListener('change', updateTopicCount);
-                cb.addEventListener('change', function() {
-                    const container = document.getElementById('worksheet');
-                    if (!container.querySelector('.empty-state')) {
-                        setTimeout(handleGenerate, 40);
-                    }
-                });
-            });
-            document.getElementById('selectAllBtn').addEventListener('click', function() {
-                const checkboxes = document.querySelectorAll('.topic-checkbox');
-                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-                checkboxes.forEach(cb => cb.checked = !allChecked);
-                updateTopicCount();
-                const container = document.getElementById('worksheet');
-                if (!container.querySelector('.empty-state')) {
-                    setTimeout(handleGenerate, 40);
-                }
-            });
-        }
-
-        function updateTopicCount() {
-            const checked = document.querySelectorAll('.topic-checkbox:checked').length;
-            const total = document.querySelectorAll('.topic-checkbox').length;
-            document.getElementById('topicCount').textContent = `${checked} af ${total} emner valgt`;
-        }
-
-        function getSelectedTopics() {
-            const checked = document.querySelectorAll('.topic-checkbox:checked');
-            return Array.from(checked).map(cb => cb.value);
-        }
-
-        // ============================================================
-        //  GLOBAL STATE
-        // ============================================================
-        let currentProblems = [];
-        let currentTopics = [];
-        let currentCount = 0;
-        let currentGrade = 2;
-
-        // ============================================================
-        //  GENERATE PROBLEMS
-        // ============================================================
-        function generateProblems(grade, topics, count) {
-            if (topics.length === 0) topics = TOPIC_KEYS.slice();
-            const problems = [];
-            for (let i = 0; i < count; i++) {
-                const t = pick(topics);
-                const p = generateProblem(grade, t);
-                if (!p.display) p.display = p.q;
-                if (!p.drawing) p.drawing = '';
-                if (p.isGeometry === undefined) p.isGeometry = false;
-                problems.push(p);
-            }
-            return problems;
-        }
-
-        // ============================================================
-        //  RENDER
-        // ============================================================
-        function renderProblems(problems, grade, topics, showAnswers) {
-            const container = document.getElementById('worksheet');
-            const wrapper = document.getElementById('worksheetWrapper');
-
-            if (!problems || problems.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="big-icon">📋</div>
-                        <p>Vælg klasse og emner, tryk <strong>Generer</strong> for at lave et nyt ark.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const topicLabel = topics.length === 1 ? TOPIC_DEFINITIONS[topics[0]]?.label || topics[0] :
-                (topics.length === 0 ? 'Ingen emner' : `Blandet (${topics.length} emner)`);
-            const gradeLabel = `${grade}. klasse`;
-
-            let html = `
-                <div class="ws-header">
-                    <div class="ws-title">📘 Arbejdsark — ${topicLabel}</div>
-                    <div class="ws-meta">
-                        <span>Klasse: <strong>${gradeLabel}</strong></span>
-                        <span>Dato: <span class="line"></span></span>
-                        <span>Navn: <span class="line"></span></span>
-                    </div>
-                </div>
-                <div class="problems-grid">
-            `;
-
-            problems.forEach((p, idx) => {
-                const num = idx + 1;
-                let displayHtml = p.display || p.q;
-                if (showAnswers) {
-                    let ansText = p.a;
-                    if (p.rawAnswer) {
-                        const s = p.rawAnswer;
-                        ansText = s.d === 1 ? `${s.n}` : `${s.n}/${s.d}`;
-                    }
-                    displayHtml = displayHtml.replace('___', `<span class="ans">${ansText}</span>`);
-                } else {
-                    displayHtml = displayHtml.replace('___', `<span class="placeholder"></span>`);
-                }
-                if (!displayHtml.includes('placeholder') && !displayHtml.includes('ans')) {
-                    displayHtml += showAnswers ? ` = <span class="ans">${p.a}</span>` :
-                        ` = <span class="placeholder"></span>`;
-                }
-
-                let drawingHtml = '';
-                if (p.drawing) {
-                    drawingHtml = `<div class="drawing-container">${p.drawing}</div>`;
-                }
-
-                const geometryClass = p.isGeometry ? 'geometry-problem' : '';
-
-                html += `
-                    <div class="problem ${geometryClass}">
-                        <div class="problem-row">
-                            ${drawingHtml}
-                            <div class="text-container">
-                                <span class="num">${num}.</span>
-                                <span class="q">${displayHtml}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            html += `</div>`;
-
-            const geometryTopics = ['geometry_area', 'geometry_perimeter', 'geometry_volume'];
-            const hasGeometry = topics.some(t => geometryTopics.includes(t));
-            if (hasGeometry) {
-                html += `<div class="formula-ref">`;
-                html += `<h3>📐 Formler (til hjælp)</h3>`;
-                html += `<div class="formula-grid">`;
-                if (topics.includes('geometry_area')) {
-                    html += `
-                        <div class="formula-item"><strong>Areal:</strong> Rektangel = l·b, Trekant = ½·g·h, Cirkel = π·r²</div>
-                    `;
-                }
-                if (topics.includes('geometry_perimeter')) {
-                    html += `
-                        <div class="formula-item"><strong>Omkreds:</strong> Rektangel = 2·(l+b), Cirkel = 2·π·r</div>
-                    `;
-                }
-                if (topics.includes('geometry_volume')) {
-                    html += `
-                        <div class="formula-item"><strong>Rumfang:</strong> Kasse = l·b·h</div>
-                    `;
-                }
-                html += `</div></div>`;
-            }
-
-            container.innerHTML = html;
-            wrapper.classList.remove('loading');
-        }
-
-        // ============================================================
-        //  HANDLE GENERATE
-        // ============================================================
-        function handleGenerate() {
-            const grade = parseInt(document.getElementById('gradeSelect').value);
-            const topics = getSelectedTopics();
-            const count = parseInt(document.getElementById('countInput').value) || 20;
-            const showAnswers = document.getElementById('showAnswersToggle').checked;
-
-            const clamped = Math.min(40, Math.max(4, count));
-            document.getElementById('countInput').value = clamped;
-
-            const problems = generateProblems(grade, topics, clamped);
-            currentProblems = problems;
-            currentTopics = topics;
-            currentCount = clamped;
-            currentGrade = grade;
-
-            const wrapper = document.getElementById('worksheetWrapper');
-            wrapper.classList.add('loading');
-            setTimeout(() => {
-                renderProblems(problems, grade, topics, showAnswers);
-            }, 60);
-        }
-
-        // ============================================================
-        //  HANDLE TOGGLE ANSWERS
-        // ============================================================
-        function handleToggleAnswers() {
-            const show = document.getElementById('showAnswersToggle').checked;
-            const container = document.getElementById('worksheet');
-            if (container.querySelector('.empty-state')) {
-                handleGenerate();
-                return;
-            }
-            renderProblems(currentProblems, currentGrade, currentTopics, show);
-        }
-
-        // ============================================================
-        //  EXPORT PDF
-        // ============================================================
-        async function exportPDF() {
-            const wrapper = document.getElementById('worksheetWrapper');
-            const container = document.getElementById('worksheet');
-            const btn = document.getElementById('exportBtn');
-
-            if (container.querySelector('.empty-state')) {
-                handleGenerate();
-                await new Promise(r => setTimeout(r, 100));
-            }
-
-            btn.disabled = true;
-            btn.textContent = '⏳ Genererer PDF...';
-
-            try {
-                const opt = {
-                    margin: [8, 8, 8, 8],
-                    filename: `matematik_${document.getElementById('gradeSelect').value}_kl_${getSelectedTopics().join('_')}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                };
-                await html2pdf().set(opt).from(wrapper).save();
-            } catch (err) {
-                console.error(err);
-                alert('Der opstod en fejl ved eksport af PDF. Prøv igen eller brug Udskriv → Gem som PDF.');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '📄 Eksporter PDF';
-            }
-        }
-
-        // ============================================================
-        //  EVENT BINDING & INIT
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            buildTopicSelector();
-            handleGenerate();
-
-            document.getElementById('generateBtn').addEventListener('click', handleGenerate);
-            document.getElementById('exportBtn').addEventListener('click', exportPDF);
-            document.getElementById('showAnswersToggle').addEventListener('change', handleToggleAnswers);
-            document.getElementById('countInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') { e.preventDefault();
-                    handleGenerate(); }
-            });
-            document.getElementById('gradeSelect').addEventListener('change', function() {
-                setTimeout(handleGenerate, 40);
-            });
+      function buildTopicGrid(grade, showAll) {
+        const container = document.getElementById('topicGridContainer');
+        const available = getAvailableTopics(grade, showAll);
+        const groups = {};
+        available.forEach(k => {
+          const g = TOPICS[k].group;
+          if (!groups[g]) groups[g] = [];
+          groups[g].push(k);
         });
-
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('generateBtn').click();
-            }
+        let html = '';
+        for (const [group, keys] of Object.entries(groups)) {
+          html += `<div class="topic-card"><div class="card-title">${group}</div><div class="card-chips">`;
+          keys.forEach(k => {
+            html += `<label class="topic-chip"><input type="checkbox" class="topic-checkbox" value="${k}" checked /> ${TOPICS[k].label}</label>`;
+          });
+          html += `</div></div>`;
+        }
+        container.innerHTML = html || '<p style="color:#94a3b8;font-size:0.85rem;">Ingen emner tilgængelige. Slå "Vis alle emner" til.</p>';
+        document.querySelectorAll('.topic-checkbox').forEach(cb => {
+          cb.addEventListener('change', () => { if (!document.getElementById('worksheet').querySelector('.empty-state')) setTimeout(handleGenerate, 40); });
         });
-    </script>
+      }
+
+      function getSelectedTopics() {
+        return Array.from(document.querySelectorAll('.topic-checkbox:checked')).map(cb => cb.value);
+      }
+
+      function handleGenerate() {
+        const grade = parseInt(document.getElementById('gradeSelect').value);
+        const topics = getSelectedTopics();
+        let count = parseInt(document.getElementById('countInput').value) || 16;
+        count = Math.min(36, Math.max(4, count));
+        document.getElementById('countInput').value = count;
+        const showAnswers = document.getElementById('showAnswersToggle').checked;
+        if (topics.length === 0) {
+          document.getElementById('worksheet').innerHTML = `<div class="empty-state"><div class="big-icon">⚠️</div><p>Vælg mindst ét emne.</p></div>`;
+          return;
+        }
+        const problems = [];
+        for (let i = 0; i < count; i++) problems.push(generateProblem(grade, pick(topics)));
+        currentProblems = problems; currentTopics = topics; currentCount = count; currentGrade = grade;
+        document.getElementById('worksheetWrapper').classList.add('loading');
+        setTimeout(() => renderProblems(problems, grade, topics, showAnswers), 50);
+      }
+
+      function renderProblems(problems, grade, topics, showAnswers) {
+        const container = document.getElementById('worksheet');
+        if (!problems.length) return;
+        const topicLabel = topics.length === 1 ? TOPICS[topics[0]]?.label || topics[0] : `Blandet (${topics.length} emner)`;
+        let html = `<div class="ws-header"><div class="ws-title">📘 ${topicLabel}</div><div class="ws-meta"><span>Klassetrin: <strong>${grade}. klasse</strong></span><span>Dato: <span class="line"></span></span><span>Navn: <span class="line"></span></span></div></div><div class="problems-grid">`;
+        problems.forEach((p, idx) => {
+          let displayHtml = p.display || p.q;
+          if (showAnswers) {
+            const ansText = p.rawAnswer ? (p.rawAnswer.d === 1 ? `${p.rawAnswer.n}` : `${p.rawAnswer.n}/${p.rawAnswer.d}`) : p.a;
+            displayHtml = displayHtml.replace('___', `<span class="ans">${ansText}</span>`);
+          } else {
+            displayHtml = displayHtml.replace('___', `<span class="placeholder"></span>`);
+          }
+          if (!displayHtml.includes('placeholder') && !displayHtml.includes('ans')) {
+            displayHtml += showAnswers ? ` = <span class="ans">${p.a}</span>` : ` = <span class="placeholder"></span>`;
+          }
+          const drawingHtml = p.drawing ? `<div class="drawing-container">${p.drawing}</div>` : '';
+          html += `<div class="problem ${p.isGeometry?'geometry-problem':''}"><div style="display:flex;gap:0.8rem;align-items:flex-start;width:100%;">${drawingHtml}<div class="text-container"><span class="num">${idx+1}.</span> <span class="q">${displayHtml}</span></div></div></div>`;
+        });
+        html += `</div>`;
+        const geomTopics = ['geometry_area','geometry_perimeter','geometry_volume','geometry_pythagoras','trigonometry'];
+        if (topics.some(t => geomTopics.includes(t))) {
+          html += `<div class="formula-ref"><h3>📐 Formelsamling</h3><div class="formula-grid">`;
+          if (topics.includes('geometry_area')) html += `<div class="formula-item"><strong>Areal:</strong> Rektangel=l·b, Trekant=½·g·h, Cirkel=π·r²</div>`;
+          if (topics.includes('geometry_volume')) html += `<div class="formula-item"><strong>Rumfang:</strong> Kasse=l·b·h</div>`;
+          if (topics.includes('geometry_pythagoras')) html += `<div class="formula-item"><strong>Pythagoras:</strong> a²+b²=c²</div>`;
+          if (topics.includes('trigonometry')) html += `<div class="formula-item"><strong>Trigonometri:</strong> sin=v/hyp, cos=h/hyp, tan=v/h</div>`;
+          html += `</div></div>`;
+        }
+        container.innerHTML = html;
+        document.getElementById('worksheetWrapper').classList.remove('loading');
+      }
+
+      function handleToggleAnswers() {
+        const show = document.getElementById('showAnswersToggle').checked;
+        if (document.getElementById('worksheet').querySelector('.empty-state')) { handleGenerate(); return; }
+        renderProblems(currentProblems, currentGrade, currentTopics, show);
+      }
+
+      async function exportPDF() {
+        const wrapper = document.getElementById('worksheetWrapper');
+        const btn = document.getElementById('exportBtn');
+        if (document.getElementById('worksheet').querySelector('.empty-state')) { handleGenerate(); await new Promise(r => setTimeout(r, 100)); }
+        btn.disabled = true; btn.textContent = '⏳...';
+        const svgs = wrapper.querySelectorAll('svg');
+        const replacements = [];
+        svgs.forEach(svg => {
+          try {
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const img = document.createElement('img');
+            img.src = url; img.width = 105; img.height = 105; img.style.display = 'block';
+            svg.parentNode.replaceChild(img, svg);
+            replacements.push({ svg, img, url });
+          } catch(e) {}
+        });
+        await new Promise(r => setTimeout(r, 300));
+        try {
+          await html2pdf().set({ margin: [6,6,6,6], filename: `matematik_${currentGrade}_kl.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, backgroundColor: '#ffffff' }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all','css'] } }).from(wrapper).save();
+        } catch(e) { alert('PDF-eksport fejlede.'); } finally {
+          replacements.forEach(({ svg, img, url }) => { try { img.parentNode.replaceChild(svg, img); URL.revokeObjectURL(url); } catch(e) {} });
+          btn.disabled = false; btn.innerHTML = '📄 PDF';
+        }
+      }
+
+      // ==================== OPDATERINGSMODAL (1.0 → 1.1) ====================
+      function showChangelog() {
+        const key = 'mathsheet-update-1.1';
+        if (localStorage.getItem(key)) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.innerHTML = `
+          <div class="modal-box">
+            <h2>✨ Opdatering 1.0 → 1.1</h2>
+            <div class="version-tag">Mere overskueligt design · Bedre matematik · Flere regnehistorier</div>
+            <ul>
+              <li><strong>Mere overskueligt design</strong> – emnerne er nu grupperet i pæne kort, og layoutet er ryddet op.</li>
+              <li><strong>Bedre matematik</strong> – opgaverne er forfinet, så de passer endnu bedre til det valgte klassetrin.</li>
+              <li><strong>Flere regnehistorier</strong> – mange opgaver indeholder nu hverdagseksempler med navne og kroner, der gør matematikken mere nærværende.</li>
+            </ul>
+            <button class="btn-close" id="closeChangelogBtn">Forstået ✓</button>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        const closeBtn = document.getElementById('closeChangelogBtn');
+        closeBtn.addEventListener('click', () => { overlay.remove(); localStorage.setItem(key, 'true'); });
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) { overlay.remove(); localStorage.setItem(key, 'true'); } });
+      }
+
+      // ==================== INIT ====================
+      document.addEventListener('DOMContentLoaded', () => {
+        const gradeSelect = document.getElementById('gradeSelect');
+        const showAllToggle = document.getElementById('showAllTopicsToggle');
+        function refreshTopics() {
+          const grade = parseInt(gradeSelect.value);
+          const showAll = showAllToggle.checked;
+          buildTopicGrid(grade, showAll);
+        }
+        gradeSelect.addEventListener('change', () => { refreshTopics(); handleGenerate(); });
+        showAllToggle.addEventListener('change', () => { refreshTopics(); if (!document.getElementById('worksheet').querySelector('.empty-state')) handleGenerate(); });
+        document.getElementById('generateBtn').addEventListener('click', handleGenerate);
+        document.getElementById('exportBtn').addEventListener('click', exportPDF);
+        document.getElementById('showAnswersToggle').addEventListener('change', handleToggleAnswers);
+        document.getElementById('countInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); handleGenerate(); } });
+        refreshTopics();
+        handleGenerate();
+        showChangelog();
+      });
+      document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); document.getElementById('generateBtn').click(); } });
+    })();
+  </script>
 </body>
 </html>
